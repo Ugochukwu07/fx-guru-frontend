@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getCurrencies } from '../../../service/UserService'
+import { getCurrencies, saveProve } from '../../../service/UserService'
 
 import TabLayout from '#/view/layout/TabLayout'
 import LoadingSpinner from "../../layout/Loading";
@@ -55,10 +55,14 @@ function Deposit(){
     const [isZoomed, setZoomed] = useState(false);
     const [popup, setPopup] = useState(false)
     const [form, setForm] = useState({
-      deposit: "",
+      address: "",
       amount: "",
-      voucher: ""
+      hash: ""
     });
+    const [errors, setErrors] = useState({});
+
+    const navigate = useNavigate();
+
     let networks = ''
 
     useEffect(() => {
@@ -80,14 +84,12 @@ function Deposit(){
         onClick={() => setCurrentNetwork(key)}
     >{item.network}</span>))
 
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
-        console.log('currentWallet', currentWallet);
         const { name, value } = e.target;
         setForm((prevForm) => ({
-          ...prevForm, // Spread the previous state
-          [name]: value // Update the specific field based on the input's "name" attribute
+          ...prevForm,
+          [name]: value
         }));
     };
 
@@ -118,7 +120,25 @@ function Deposit(){
     };
 
     const handleSavePaymentProof = () => {
-        
+        setForm((prevForm) => ({
+            ...prevForm,
+            currency_id: currentWallet[currentNetwork].id
+        }));
+        try{
+            setErrors({});
+            saveProve(token, form).then(response => {
+                if(response.success){
+                    toast.success(response.message);
+                    setErrors({});
+                }else{
+                    setErrors(response.errors);
+                }
+            })
+            
+        } catch(err){
+            toast.error(err.message)
+            console.error('Error fetching data:', err)
+        }
     }
     
 
@@ -185,7 +205,14 @@ function Deposit(){
                         transition={{ duration: .3 }}
                     >
                         <label>Deposit Address</label>
-                        <input type='text' required placeholder={currentWallet[currentNetwork].address} onChange={handleChange} name='deposit' value={form.deposit} />
+                        <input type='text' required placeholder={currentWallet[currentNetwork].address} onChange={handleChange} name='address' value={form.address} />
+                        {errors.address && (
+                            <motion.span initial={{ opacity: 0, y: -100 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: .3 }}
+                                className="error-message text-red-500 font-light"
+                            >{errors.address[0]}</motion.span>
+                        )}
                     </motion.div>
                     <motion.div className='input_group'
                         ref={ref}
@@ -195,6 +222,13 @@ function Deposit(){
                     >
                         <label>Amount</label>
                         <input type='number' required placeholder={ '1 ' + currentWallet[currentNetwork].symbol} onChange={handleChange} name='amount' value={form.amount} />
+                        {errors.amount && (
+                            <motion.span initial={{ opacity: 0, y: -100 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: .3 }}
+                                className="error-message text-red-500 font-light"
+                            >{errors.amount[0]}</motion.span>
+                        )}
                     </motion.div>
                     <motion.div className='input_group'
                         ref={ref}
@@ -203,7 +237,7 @@ function Deposit(){
                         transition={{ duration: .3 }}
                     >
                         <label>Transfer Hash</label>
-                        <input type='text' onChange={handleChange} name='voucher' value={form.voucher} />
+                        <input type='text' onChange={handleChange} name='hash' value={form.hash} />
                     </motion.div>
 
                     <motion.div className='btn-group'

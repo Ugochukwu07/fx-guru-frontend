@@ -24,7 +24,8 @@ export default function Transfer(){
         },
         from: "",
         amount: 0,
-    }); 
+    });
+    const [data, setData] = useState({});
     const [isZoomed, setZoomed] = useState(false);
     
     const toggleZoom = () => {
@@ -32,7 +33,7 @@ export default function Transfer(){
     };
 
     const goBack = () => {
-        navigate(-1); // Go back in the navigation history
+        navigate(-1);
     };
   
     const handleChange = (e) => {
@@ -42,6 +43,10 @@ export default function Transfer(){
         [name]: value
         }));
     };
+
+    const handleWalletSelect = () => {
+        
+    }
 
     const handleAddressSelect = (wallet) => {
         console.log(wallet)
@@ -69,7 +74,7 @@ export default function Transfer(){
     const my_accounts = Object.keys(accounts);
 
     const accounts_list = my_accounts.map((key) => (
-      <li key={key}>{key.charAt(0).toUpperCase() + key.slice(1)} Account</li>
+      <li onClick={() => setForm({ ...form, from: key.charAt(0).toUpperCase() + key.slice(1)})} key={key}>{key.charAt(0).toUpperCase() + key.slice(1)} Account</li>
     ));
     
     const toggleFromPopUp = () => {
