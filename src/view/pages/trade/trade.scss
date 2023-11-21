@@ -1,0 +1,15 @@
+.trade{
+    .exchange_title{
+        justify-content: space-between !important;
+        .box{
+            span{
+                color: rgba(38, 71, 141, 0.5);
+                &.active{
+                    font-size: 17px;
+                    color: rgba(34, 64, 196, 1);
+                    
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,60 @@
+.market{
+    padding: 5px;
+    &_table{
+        table{
+            width: 100%;
+        }
+        th{
+            text-align: left;
+            font-size: 11px;
+            font-weight: 400;
+        }
+        td{
+            padding: 5px;
+            text-align: center;
+        }
+        .table__pairs{
+            display: flex;
+            align-items: center;
+            img{
+                width: 30px;
+                margin-right: 5px;
+                &.table_charts{
+                    width: 70px;
+                }
+            }
+            span{
+                font-size: 20px;
+                margin: 0px 5px;
+                font-weight: 400;
+                line-height: 15px;
+                text-align: left !important;
+                font-family: JasmineUPC;
+                span{
+                    display: block;
+                    margin: 0;
+                    color: #575B66;
+                    font-size: 16px;
+                }
+            }
+
+        }
+        .table__price, .table__change{
+            font-size: 15px;
+            font-family: JasmineUPC;
+            display: inline-block;
+            text-align: center;
+            margin: auto;
+            &.up{
+                color: #40BF6A;
+            }
+            &.down{
+                color: #FF0000;
+            }
+        }
+        .table__change__img{
+            width: 10px;
+            display: inline;
+        }
+    }
+}

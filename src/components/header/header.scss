@@ -1,0 +1,15 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    .logo{
+        img{
+            width: 80px;
+        }
+    }
+    .avatar{
+        img{
+            width: 30px;
+        }
+    }
+}

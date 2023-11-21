@@ -1,0 +1,72 @@
+.active_page{
+    padding: 20px;
+    &_title{
+        span{
+            font-weight: 500;
+            color: rgba(34, 64, 196, 1);
+            font-size: 20px;
+            img{
+                display: inline;
+                width: 18px;
+                margin-right: 5px;
+            }
+        }
+        margin-bottom: 30px;
+    }
+    &_body{
+        .circle_timer{
+            position: relative;
+            border: 3px solid rgba(34, 64, 196, 1);
+            border-radius: 1000px;
+            height: 170px;
+            width: 170px;
+            padding: 5px;
+            margin-bottom: 20px;
+            &::after{
+                position: absolute;
+                content: '';
+                width: 15px;
+                height: 15px;
+                border: 1px solid rgba(34, 64, 196, 1);
+                background-color: rgba(255, 255, 255, 1);
+                top: -7.5px;
+                border-radius: 1000px;
+            }
+            span{
+                display: block;
+                font-size: 10px;
+                font-weight: 500;
+                &.time{
+                    font-size: 30px;
+                    margin-top: 2rem;
+                    color: rgba(34, 64, 196, 1);
+                }
+                &:nth-child(2){
+                    color: rgba(164, 175, 206, 1);
+                }
+                &:last-child{
+                    font-size: 14px;
+                }
+            }
+        }
+
+        .info{
+            margin-bottom: 2rem;
+            span{
+                font-size: 12px;
+                margin-top: 4px;
+                &:nth-child(even){
+                    text-align: end;
+                }
+            }
+        }
+        button{
+            width: 100%;
+            color: white;
+            font-weight: 500;
+            background-color: rgba(34, 64, 196, 1);
+            border-radius: 5px;
+            padding: 10px;
+        }
+    }
+}

@@ -1,0 +1,40 @@
+.input_group input, .input_group select {
+    font-size: 9px;
+}
+
+.history_body{
+    padding: 0rem .1rem;
+    .order{
+        &_title{
+            margin-bottom: 10px;
+            span{
+                font-size: 10px;
+                margin-right: 5px;
+
+                &:last-child{
+                    color: rgba(0, 0, 0, 0.5);
+                }
+            }
+        }
+
+        &_body{
+            span{
+                font-size: 11px;
+                display: block;
+                font-weight: 300;
+                letter-spacing: 1px;
+
+            }
+            .information, .numbers, .current{
+                span{
+                    &.quote{
+                        color: rgba(0, 0, 0, 1);
+                    }
+                    &.price{
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+}

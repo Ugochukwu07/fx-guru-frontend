@@ -1,0 +1,45 @@
+.major_pairs{
+    .title_block{
+        margin: 15px 0px;
+    }
+    .pairs{
+        display: flex;
+        border: 1px solid #A4AFCE40;
+        padding: 5px;
+        .pair{
+            flex: 1;
+            padding: 5px;
+            border-right: 1px solid #2240C4;
+            text-align: center;
+            span{
+                display: block;
+                text-align: right;
+                font-weight: 400;
+                font-size: 12px;
+                color: #FF0000;
+            }
+            p{
+                font-weight: 400;
+                font-family: JasmineUPC;
+                margin: 0 !important;
+                &.quote{
+                    color: black;
+                    font-size: 19px;
+                }
+                &.price{
+                    font-size: 17px;
+                    &.up{
+                        color: #40BF6A;
+                    }
+                    &.down{
+                        color: #FF0000;
+                    }
+                }
+            }
+
+            &:last-child{
+                border-right: none;
+            }
+        }
+    }
+}

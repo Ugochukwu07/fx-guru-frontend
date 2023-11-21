@@ -1,0 +1,27 @@
+.h2{
+    font-weight: 500;
+    font-size: 17px;
+    text-transform: capitalize;
+}
+
+.notification {
+    background-color: #CEBBA41A;
+    padding: 10px 5px;
+    display: flex;
+    margin: 0px 7px;
+    margin-bottom: 1rem;
+    p{
+        color: #2240C4;
+        font-size: 11px;
+        span{
+            color: #26478D80;
+        }
+    }
+    img{
+        width: 14px;
+        margin-left: 5px;
+    }
+    .app_icon{
+        margin-left: auto;
+    }
+}

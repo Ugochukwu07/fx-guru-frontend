@@ -1,0 +1,29 @@
+.register{
+    padding: 2rem 2rem;
+    text-align: center;
+    .title{
+            font-family: JasmineUPC;
+            font-weight: 500;
+            font-size: 19px;
+            color: rgba(255, 134, 0, 1);
+            margin: 2rem 0rem;
+            span{
+                color: rgba(34, 64, 196, 1);
+            }
+    }
+    &_form{
+        padding: 0px 15px;
+    }
+
+    &_foot{
+        margin-top: 10px;
+        text-align: center;
+        font-size: 500;
+        span, a{
+            font-size: 12px;
+        }
+        a{
+            color: rgba(34, 64, 196, 1);
+        }
+    }
+}

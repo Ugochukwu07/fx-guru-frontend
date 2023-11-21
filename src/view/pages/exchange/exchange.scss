@@ -1,0 +1,149 @@
+.exchange{
+    padding: 15px;
+    padding-top: 2.2rem;
+    &_title{
+        text-align: center;
+        h1{
+            color: rgba(34, 64, 196, 1);
+            font-weight: 500;
+            font-size: 16px;
+        }
+        span{
+            font-size: 10px;
+            font-weight: 500;
+            color: black;
+            margin: 1.5rem;
+            img{
+                display: inline;
+                width: 10px;
+                align-self: center;
+            }
+        }
+    }
+    &_body{
+        padding: 1rem 0rem;
+        &__execute{
+            padding: 5px;
+            .title{
+                text-align: center;
+                span{
+                    margin: 0px 10px;
+                    color: rgba(164, 175, 206, 1);
+                    font-size: 12px;
+                    &.active{
+                        &.up{
+                            color: rgba(64, 191, 106, 1);
+                        }
+                    }
+
+                }
+            }
+            .form{
+                .input_group{
+                    margin-top: .4rem !important;
+                    label{
+                        font-size: 9px;
+                    }
+                    span{
+                        img{
+                            width: 8px;
+                        }
+                    }
+                }
+                .info{
+                    span{
+                        font-size: 10px;
+                    }
+                }
+                .btn-up{
+                    background-color: rgba(64, 191, 106, 1);
+                    color: white;
+                    border-radius: 5px;
+                    padding: 10px !important;
+                    margin-top: .5rem;
+                    font-size: 11px;
+                    font-weight: 500;
+                    // font-family: JasmineUPC;
+                }
+            }
+        }
+        &__price{
+            padding: 5px;
+            padding-left: 10px;
+            .title{
+                text-align: center;
+                h2{
+                    font-size: 14px;
+                    margin-bottom: 8px;
+                    &.up{
+                        color: rgba(64, 191, 106, 1);
+                    }
+                    span{
+                        color: rgb(10, 10, 10) !important;
+                    }
+                }
+            }
+            .low_price{
+                border-bottom: 1px solid rgba(164, 175, 206, 1);
+                padding-bottom: 14px;
+                margin-bottom: 13px;
+            }
+        }
+    }
+}
+.history{
+    border-top: 1px solid rgb(56, 56, 56);
+    padding: 10px 0px;
+    &_tabs{
+        text-align: center;
+        margin-bottom: 10px;
+        span{
+            font-size: 10px;
+            margin: 0px 10px;
+            font-weight: 600;
+            &.active{
+                color: rgba(34, 64, 196, 1);
+            }
+        }
+    }
+    &_body{
+        padding: 5px 0px;
+    }
+}
+
+.no_data{
+    img{
+        width: 40px;
+    }
+}
+
+.figure-m{
+    position: relative;
+    span{
+        font-size: 11px;
+        margin: 5px 0px;
+        font-weight: 500;
+        &:last-child{
+            margin-left: auto;
+            padding-right: 6px;
+        }
+    }
+    .overlay{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        &.down{
+            background-color: rgba(223, 32, 64, 0.15);
+        }
+        &.up{
+            background-color: rgba(64, 191, 106, 0.2);
+        }
+    }
+    &.up{
+        color: rgba(64, 191, 106, 1);
+    }
+    &.down span{
+        color: rgba(223, 32, 64, 1);
+    }
+}

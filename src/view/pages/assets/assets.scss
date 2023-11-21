@@ -1,0 +1,59 @@
+.assets{
+    padding-bottom: 4rem;
+    .profile{
+        background-color: rgba(34, 64, 196, 1);
+        color: white;
+        padding: 1.3rem;
+        &__id{
+            display: flex;
+            justify-content: space-between;
+            .info{
+                align-items: center;
+                display: flex;
+                span{
+                    display: block;
+                    font-size: 10px;
+                }
+            }
+            img{
+                width: 40px;
+                margin-right: 10px;
+            }
+            .profile__notification{
+                width: 20px;
+                margin-right: 0px;
+            }
+        }
+        &__info{
+            text-align: center;
+            margin: 2rem auto;
+            margin-bottom: 3rem;
+            h3{
+                font-size: 12px;
+                font-weight: 600;
+            }
+            h1{
+                margin-bottom: 0px;
+                color: rgba(255, 125, 96, 1);
+                font-weight: 500;
+            }
+            span{
+                font-size: 10px;
+                display: block;
+                font-weight: 400;
+                img{
+                    width: 15px;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .actions{
+        width: 80%;
+        margin: auto;
+        transform: translateY(-50%);
+        background-color: white;
+        border-radius: 8px;
+    }
+}
