@@ -27,6 +27,7 @@ export default function Trade(){
         plans: [],
     });
     const [tradeMode, setTradeMode] = useState(true);
+    const [precent, setPercent] = useState(0);
 
     useEffect(() => {
         getOptionsBalance(token).then(data => {
@@ -50,7 +51,11 @@ export default function Trade(){
     const handleTradeMode = (prev) => setTradeMode(!prev)
 
     const handleModeChange = (e) => setCurrency(e.target.value)
-    const handleRateChange = (e) => setRate(e.target.value)
+    const handleRateChange = (e) => {
+        const plan = data.plans.find(item => item.id === e.target.value)
+        setPercent(plan.rate)
+        setRate(e.target.value)
+    }
 
     return (
         <TabLayout nav={'trade'}>
@@ -144,12 +149,12 @@ export default function Trade(){
                                             <span className="error-message text-red-500 font-light">{errors.time[0]}</span>
                                         )}
                                     </motion.div>
-                                    <span className='text-xs mb-16'>Profit rate 20.00%</span>
+                                    <span className='text-xs mb-16'>Profit rate {precent}%</span>
                                     <br /><br />
                                     <div className='info'>
                                         <div className='info_block flex justify-between'>
                                             <span>Available</span>
-                                            <span>O.OO {currency}</span>
+                                            <span>{data.balance} {currency}</span>
                                         </div>
                                         <div className='info_block flex justify-between'>
                                             <span>Volume</span>
