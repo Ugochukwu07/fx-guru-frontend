@@ -27,7 +27,7 @@ export default function Trade(){
         plans: [],
     });
     const [tradeMode, setTradeMode] = useState(true);
-    const [precent, setPercent] = useState(0);
+    const [percent, setPercent] = useState(0);
 
     useEffect(() => {
         getOptionsBalance(token).then(data => {
@@ -149,7 +149,7 @@ export default function Trade(){
                                             <span className="error-message text-red-500 font-light">{errors.time[0]}</span>
                                         )}
                                     </motion.div>
-                                    <span className='text-xs mb-16'>Profit rate {precent}%</span>
+                                    <span className='text-xs mb-16'>Profit rate {percent}%</span>
                                     <br /><br />
                                     <div className='info'>
                                         <div className='info_block flex justify-between'>
