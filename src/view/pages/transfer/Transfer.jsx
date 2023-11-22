@@ -2,35 +2,28 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from "framer-motion"
 import TabLayout from '#/view/layout/TabLayout'
+import { useSelector } from 'react-redux'
+import { ToastContainer, toast } from 'react-toastify';
 
 import './transfer.scss'
 
 import back from '#/assets/icons/back.svg'
-import down_caret from "#/assets/icons/down_caret.svg"
-import fe_arrow_left from '#/assets/icons/fe_arrow-left.svg'
 
-import {wallets, accounts} from '#/data/currency'
+import {accounts} from '#/data/currency'
+import LoadingSpinner from '#/view/layout/Loading'
+import { saveTransfer } from '#/service/UserService'
 
 export default function Transfer(){
     const navigate = useNavigate();
-    const [currencyPopup, setCurrencyPopup] = useState(false)
-    const [fromPopup, setFromPopup] = useState(false)
-    const [toPopup, setToPopup] = useState(false)
-    const [selectedWallet, setSelectedWallet] = useState(null);
+
+    const { token } = useSelector((state) => state.login);
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
     const [form, setForm] = useState({
-        currency: {
-            id: selectedWallet?.id,
-            name: selectedWallet?.name
-        },
-        from: "",
+        from_account: "",
+        to_account: "",
         amount: 0,
     });
-    const [data, setData] = useState({});
-    const [isZoomed, setZoomed] = useState(false);
-    
-    const toggleZoom = () => {
-        setZoomed(!isZoomed);
-    };
 
     const goBack = () => {
         navigate(-1);
@@ -39,53 +32,43 @@ export default function Transfer(){
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prevForm) => ({
-        ...prevForm,
-        [name]: value
+            ...prevForm,
+            [name]: value
         }));
     };
 
-    const handleWalletSelect = () => {
-        
+    const submitTransfer = () => {
+        try{
+            setErrors({});
+            setLoading(true)
+            saveTransfer(token, form).then(response => {
+                if(response.success){
+                    setLoading(false)
+                    toast.success(response.message);
+                    setErrors({});
+                    setForm((prevForm) => ({
+                        ...prevForm,
+                        from_account: "",
+                        to_account: "",
+                        amount: 0,
+                    }));
+                }else{
+                    setLoading(false)
+                    toast.error(response.message);
+                    (response.status == 401) && setErrors(response.errors);
+                }
+            })
+        } catch(err){
+            toast.error(err.message)
+            console.error('Error fetching data:', err)
+        }
     }
-
-    const handleAddressSelect = (wallet) => {
-        console.log(wallet)
-        setSelectedWallet(wallet);
-        setCurrencyPopup(!currencyPopup)
-      };
-
-    const handleCurrencySelect = (e) => {
-        // const {id} = e.target
-        console.log(e.target);
-
-        // setForm(prev => ({
-        //     ...prev,
-        //     'currency': {
-        //         id: id,
-        //         name: e.target.attribute()
-        //     }
-        // }))
-    }
-
-    const currencies_list = Object.keys(wallets).map((currency) => (
-      <li data-id={wallets} onClick={() => handleAddressSelect(wallets)} key={currency}>{currency}</li>
-    ));
 
     const my_accounts = Object.keys(accounts);
 
-    const accounts_list = my_accounts.map((key) => (
-      <li onClick={() => setForm({ ...form, from: key.charAt(0).toUpperCase() + key.slice(1)})} key={key}>{key.charAt(0).toUpperCase() + key.slice(1)} Account</li>
-    ));
-    
-    const toggleFromPopUp = () => {
-        setFromPopup(!fromPopup)
-    }
-    const toggleToPopUp = () => {
-        setToPopup(!popup)
-    }
-
     return (
         <TabLayout nav={"exchange"}>
+        <ToastContainer />
             <div className='deposit transfer'>
                 <div className='deposit_header flex'>
                     <div className='deposit_header__nav'>
@@ -95,74 +78,93 @@ export default function Transfer(){
                         <span>Transfer</span>
                     </div>
                 </div>
-
-                <div className="transfer_form">
-                    
-                    <motion.div 
-                        className='input_group'
-                        initial={{ opacity: 0, y: -100 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: .1 }}
-                    >
-                        <label>From</label>
-                        <input readOnly type='text' onClick={toggleFromPopUp} name='currency' value={form.from} />
-                        <span className='eye-icon' onClick={toggleFromPopUp}><img src={down_caret} /></span>
-                    </motion.div>
-                    <motion.div 
-                        className='input_group'
-                        initial={{ opacity: 0, y: -100 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: .1 }}
-                    >
-                        <label>To</label>
-                        <input readOnly type='text' onClick={toggleFromPopUp} name='currency' value={form.from} />
-                        <span className='eye-icon' onClick={toggleFromPopUp}><img src={down_caret} /></span>
-                    </motion.div>
-                    <motion.div 
-                        className='input_group mb-0'
-                        initial={{ opacity: 0, y: -100 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: .3 }}
-                    >
-                        <label>Transfer amount</label>
-                        <input type='number' onChange={handleChange} name='amount' value={form.amount} />
-                        <span className="eye-icon">
-                            USDT
-                        </span>
-                    </motion.div>
-                    <span className="forget float-left my-1">Fee: 0 USDT</span>
-                    <br />
-                    <motion.div className='btn-group mt-3'
-                        initial={{ opacity: 0, y: -100 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: .4 }}
-                    >
-                        <span className='top_text'>Arrived amount: <span>0.11</span></span>
-                        <button>Transfer</button>
-                    </motion.div>
-                </div>
                 {
-                    fromPopup && 
-                    <motion.div 
-                        className="currency"
-                        initial={{  scale: 1  }}
-                        animate={{ scale: 1.1, translateX: '-50%' }}
-                        onClick={toggleZoom}
-                    >
-                        <div className='currency_header flex'>
-                            <div className='currency_header__nav'>
-                                <img onClick={toggleFromPopUp} src={fe_arrow_left} />
-                            </div>
-                            <div className='currency_header__title'>
-                                <span>Select Account</span>
-                            </div>
+                    loading ? (
+                    <LoadingSpinner />
+                    ) : (
+                        <div className="transfer_form">
+                            
+                            <motion.div 
+                                className='input_group'
+                                initial={{ opacity: 0, y: -100 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: .1 }}
+                            >
+                                <label>From</label>
+                                <select onChange={handleChange} name='from_account'>
+                                    <option>From</option>
+                                    { my_accounts.map((item, index) => (
+                                        <option selected={form.from_account == index} value={index} key={index}>
+                                            {item.charAt(0).toUpperCase() + item.slice(1)} Account
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.from_account && (
+                                    <motion.span initial={{ opacity: 0, y: -100 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: .3 }}
+                                        className="error-message text-red-500 font-light"
+                                    >{errors.from_account[0]}</motion.span>
+                                )}
+                                {/* <input readOnly type='text' onClick={toggleFromPopUp} name='currency' value={form.from} />
+                                <span className='eye-icon' onClick={toggleFromPopUp}><img src={down_caret} /></span> */}
+                            </motion.div>
+                            <motion.div 
+                                className='input_group'
+                                initial={{ opacity: 0, y: -100 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: .1 }}
+                            >
+                                <label>To</label>
+                                <select onChange={handleChange} name='to_account'>
+                                    <option>To</option>
+                                    { my_accounts.map((item, index) => (
+                                        <option selected={form.to_account == index} value={index} key={index}>
+                                            {item.charAt(0).toUpperCase() + item.slice(1)} Account
+                                        </option>)
+                                    )}
+                                </select>
+                                {errors.to_account && (
+                                    <motion.span initial={{ opacity: 0, y: -100 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: .3 }}
+                                        className="error-message text-red-500 font-light"
+                                    >{errors.to_account[0]}</motion.span>
+                                )}
+                                {/* <input readOnly type='text' onClick={toggleFromPopUp} name='currency' value={form.from} />
+                                <span className='eye-icon' onClick={toggleFromPopUp}><img src={down_caret} /></span> */}
+                            </motion.div>
+                            <motion.div 
+                                className='input_group mb-0'
+                                initial={{ opacity: 0, y: -100 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: .3 }}
+                            >
+                                <label>Transfer amount</label>
+                                <input type='number' onChange={handleChange} name='amount' value={form.amount} />
+                                <span className="eye-icon">
+                                    USDT
+                                </span>
+                                {errors.amount && (
+                                    <motion.span initial={{ opacity: 0, y: -100 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: .3 }}
+                                        className="error-message text-red-500 font-light"
+                                    >{errors.amount[0]}</motion.span>
+                                )}
+                            </motion.div>
+                            <span className="forget float-left my-1">Fee: 0 USDT</span>
+                            <br />
+                            <motion.div className='btn-group mt-3'
+                                initial={{ opacity: 0, y: -100 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: .4 }}
+                            >
+                                <span className='top_text'>Arrived amount: <span>{ form.amount}</span></span>
+                                <button onClick={submitTransfer}>Transfer</button>
+                            </motion.div>
                         </div>
-                        <div className='currency_list'>
-                            <ul>
-                                {accounts_list}
-                            </ul>
-                        </div>
-                    </motion.div>
+                    )
                 }
             </div>
         </TabLayout>

@@ -72,8 +72,11 @@ function Deposit(){
                 setWallets(data);
                 setCurrenciesList(setupWallet(data))
                 setCurrentWallet(data[Object.keys(data)[0]])
-            } catch (error) { console.error('Error fetching data:', error);
-            } finally { setLoading(false);}
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchData();
     }, [])

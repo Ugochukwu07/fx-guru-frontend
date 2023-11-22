@@ -12,92 +12,45 @@ import nodata from '../../../assets/icons/nodata.svg'
 import { useEffect, useState } from 'react';
 import Price from '../../../components/price/Price';
 import { Link } from 'react-router-dom';
+import { getOptionsBalance } from '../../../service/UserService';
+import { useSelector } from 'react-redux';
 
 export default function Trade(){
-    const [errors, setErrors] = useState({});
-    const [currency, setCurrency] = useState('');
-    
-    const options = [
-        {
-            id: 1,
-            name: '300 Sec',
-            value: 300
-        },
-        {
-            id: 2,
-            name: '600 Sec',
-            value: 600
-        },
-        {
-            id: 3,
-            name: '900 Sec',
-            value: 900
-        },
-    ]
+    const {token} = useSelector(state => state.login)
 
-    const wallets = {
-        USDT: [
-            {
-                id: 1,
-                address: '4M7Nx3tdfp2c9YuwWBYaUoPg',
-                network: 'TRC20'
-            },
-            {
-                id: 2,
-                address: 'ERC4M7Nx3tdfp2c9YuwWBYaUoPg',
-                network: 'ERC20'
-            }
-        ],
-        BTC: [
-            {
-                id: 1,
-                address: '4M7Nx3tdfp2c9YuwWBYaUoPg',
-                network: 'TRC20'
-            },
-            {
-                id: 2,
-                address: 'ERC4M7Nx3tdfp2c9YuwWBYaUoPg',
-                network: 'ERC20'
-            }
-        ],
-        ETH: [
-            {
-                id: 1,
-                address: '4M7Nx3tdfp2c9YuwWBYaUoPg',
-                network: 'TRC20'
-            },
-            {
-                id: 2,
-                address: 'ERC4M7Nx3tdfp2c9YuwWBYaUoPg',
-                network: 'ERC20'
-            }
-        ],
-        XRP: [
-            {
-                id: 1,
-                address: '4M7Nx3tdfp2c9YuwWBYaUoPg',
-                network: 'TRC20'
-            },
-            {
-                id: 2,
-                address: 'ERC4M7Nx3tdfp2c9YuwWBYaUoPg',
-                network: 'ERC20'
-            }
-        ],
-    }
-    const currencies = wallets ? Object.keys(wallets) : [];
+    const [errors, setErrors] = useState({});
+    const [currency, setCurrency] = useState([]);
+    const [rate, setRate] = useState([]);
+    const [data, setData] = useState({
+        balance: 0,
+        currencies: [],
+        plans: [],
+    });
+    const [tradeMode, setTradeMode] = useState(true);
 
     useEffect(() => {
-        if (currencies.length > 0) {
-            setCurrency(currencies[0]);
-        }
-    }, [currencies]);
+        getOptionsBalance(token).then(data => {
+            setData(prev => {
+                return {
+                    ...prev, 
+                    balance: data.balance,
+                    currencies: data.currencies,
+                    plans: data.plans
+                }
+            })
+        })
+    }, [])
 
-    const handleModeChange = event => setCurrency(event.target.value)
+    // useEffect(() => {
+    //     if (data.currencies.length > 0) {
+    //         setCurrency(data.currencies[0].symbol);
+    //     }
+    // }, [data.currencies]);
 
-    const currencies_list = currencies.map((key) => (
-      <option key={key}>{key}</option>
-    ));
+    const handleTradeMode = (prev) => setTradeMode(!prev)
+
+    const handleModeChange = (e) => setCurrency(e.target.value)
+    const handleRateChange = (e) => setRate(e.target.value)
 
     return (
         <TabLayout nav={'trade'}>
@@ -108,28 +61,28 @@ export default function Trade(){
                         <Link to={'/contracts'}><span> <img src={swap} /> Contracts</span></Link>
                     </div>
                     <div className='exchange_title__quote'>
-                        <span>BTC/USDT <img src={chart} /></span>
+                        <span>{currency}/USDT <img src={chart} /></span>
                     </div>
                 </div>
                 <div className="flex exchange_body">
                     <div className="w-1/2 exchange_body__execute">
                         <div className='title'>
-                            <span className='up active'>Buy</span>
-                            <span className='down'>Sell</span>
+                            <span onClick={() => setTradeMode(true)} className={`up ${tradeMode && 'active'}`}>Buy</span>
+                            <span onClick={() => setTradeMode(false)} className={`down ${!tradeMode && 'active'}`}>Sell</span>
                         </div>
                         <div className="form">
                             <Formik
                                 initialValues={{
-                                    time: '300 Sec',
-                                    mode: '',
+                                    time: data.plans[0]?.id,
+                                    mode: data.currencies[0]?.symbol,
                                     price: '',
                                 }}
                                 validationSchema={exchangeSchema}
-                                onSubmit={console.log('Submitted')}
+                                onSubmit={() => console.log('Submitted')}
                             >
                                 <Form>
                                     <motion.div 
-                                        className={`input_group ${errors.name ? 'border border-red-500' : ''}`}
+                                        className={`input_group ${errors.name ? 'border border-red-500' : ''} text-black`}
                                         initial={{ opacity: 0, y: -100 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: .1 }}
@@ -140,7 +93,14 @@ export default function Trade(){
                                             name="mode"
                                             onChange={handleModeChange}
                                         >
-                                            {currencies_list}
+                                            <option></option>
+                                            {
+                                                data.currencies.map((value, index) => (
+                                                    <option key={index}>
+                                                        {value.symbol}
+                                                    </option>
+                                                ))
+                                            }
                                         </Field>
                                         <ErrorMessage name="name" component="span" className="error-message text-red-500 font-light" />
                                         {errors.name && (
@@ -168,9 +128,13 @@ export default function Trade(){
                                         transition={{ duration: .1 }}
                                     >
                                         <label>Open time</label>
-                                        <Field as="select" name="time">
+                                        <Field 
+                                            as="select" 
+                                            name="time"
+                                            onChange={handleRateChange}
+                                        >
                                             {
-                                                options.map((item, key) => {
+                                                data.plans.map((item, key) => {
                                                     return (<option key={key} value={item.id}>{item.name}</option>)
                                                 })
                                             }
@@ -197,8 +161,8 @@ export default function Trade(){
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: .5 }}
                                     >
-                                        <button className='btn btn-up bg-green-700 text-white btn-buy' type="submit" >
-                                            BUY/BTC
+                                        <button className={`btn ${tradeMode ? 'btn-up' : 'btn-down'} text-white btn-buy`} type="submit" >
+                                            {tradeMode ? 'BUY' : 'SELL'}/{currency}
                                         </button>
                                     </motion.div>
                                 </Form>
@@ -207,9 +171,9 @@ export default function Trade(){
                     </div>
                     <div className="w-1/2 exchange_body__price">
                         <div className='title'>
-                            <h2 className='up'>0.00 <span>USDT</span></h2>
+                            <h2 className='up'>{data.balance} <span>USDT</span></h2>
                         </div>
-                        <Price data={{ price: 1678, rate: 10 }} />
+                        <Price data={{ price: 1678, rate: 2 }} />
                     </div>
                 </div>
                 <div className='w-full history'>

@@ -42,3 +42,31 @@ export async function saveProve(token, formData) {
     throw error;
   }
 }
+
+export async function saveTransfer(token, formData) {
+  try {
+    const response = await request.post('/v1/transfer/save', formData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getOptionsBalance(token) {
+  try {
+    const response = await request.get('/v1/user/options', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+}

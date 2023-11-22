@@ -62,7 +62,7 @@ body{
       padding: 6px 8px;
       // padding-top: 10px;
       line-height: 20px;
-      font-size: 14px;
+      font-size: 15px;
       width: 100%;
       border: none;
       background-color: transparent;
@@ -112,17 +112,20 @@ body{
   }
 }
 
-.up{
-  color: rgba(64, 191, 106, 1);
+.up.active{
+  color: rgba(64, 191, 106, 1) !important;
 }
+
 .btn-up{
-  color: white;
-  background-color: rgba(64, 191, 106, 1);
+  color: red;
+  background-color: rgba(64, 191, 106, 1) !important;
 }
-.down{
-  color: rgba(223, 32, 64, 1);
+
+.down.active{
+  color: rgba(223, 32, 64, 1) !important;
 }
-.btn-down{
-  color: white;
-  background-color: rgba(223, 32, 64, 1);
+
+.btn-down {
+  color: white !important;
+  background-color: rgba(223, 32, 64, 1) !important;
 }

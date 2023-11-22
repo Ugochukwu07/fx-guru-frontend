@@ -102,7 +102,7 @@ export default function Contract(){
 
     return (
         <TabLayout nav={'trade'}>
-            <div className='exchange trade'>
+            <div className='exchange contracts trade'>
                 <div className='exchange_title'>
                     <div className='box'>
                         <span className='active'>Contracts</span>
@@ -166,10 +166,10 @@ export default function Contract(){
                                     >
                                         <label>Leverage</label>
                                         <Field as="select" name="time">
-                                            <option value={1}>1</option>
-                                            <option value={2}>2</option>
-                                            <option value={3}>3</option>
-                                            <option value={4}>4</option>
+                                            <option style={{ fontSize: 9 }} value={1}>1</option>
+                                            <option style={{ fontSize: 9 }} value={2}>2</option>
+                                            <option style={{ fontSize: 9 }} value={3}>3</option>
+                                            <option style={{ fontSize: 9 }} value={4}>4</option>
                                         </Field>
                                         <ErrorMessage name="time" component="span" className="error-message text-red-500 font-light" />
                                         {errors.time && (

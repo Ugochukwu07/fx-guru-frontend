@@ -1,8 +1,25 @@
+import { useEffect, useState } from "react";
 import generateNumbers from "../../utility/helper";
 
 export default function Price(probs){
-    console.log(probs.data);
-    const data = probs.data;
+    const [data, setData] = useState(probs.data)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setData((prev) => {
+                return {
+                    ...prev,
+                    price: prev.price + 0.000001
+                }
+            });
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [data.price]);
+
+
     const {above, below} = generateNumbers(data.price, data.rate)
 
     const up_prices = above.map((number, key) => {
