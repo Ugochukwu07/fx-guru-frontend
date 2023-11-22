@@ -123,6 +123,7 @@ function Deposit(){
     };
 
     const handleSavePaymentProof = () => {
+        setLoading(true)
         setForm((prevForm) => ({
             ...prevForm,
             currency_id: currentWallet[currentNetwork].id
@@ -133,12 +134,15 @@ function Deposit(){
                 if(response.success){
                     toast.success(response.message);
                     setErrors({});
+                    setLoading(false)
                 }else{
+                    setLoading(false)
                     setErrors(response.errors);
                 }
             })
             
         } catch(err){
+            setLoading(false)
             toast.error(err.message)
             console.error('Error fetching data:', err)
         }

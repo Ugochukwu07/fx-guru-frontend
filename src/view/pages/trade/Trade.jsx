@@ -28,6 +28,7 @@ export default function Trade(){
     });
     const [tradeMode, setTradeMode] = useState(true);
     const [percent, setPercent] = useState(0);
+    const [amount, setAmount] = useState([0,0]);
 
     useEffect(() => {
         getOptionsBalance(token).then(data => {
@@ -52,8 +53,10 @@ export default function Trade(){
 
     const handleModeChange = (e) => setCurrency(e.target.value)
     const handleRateChange = (e) => {
-        const plan = data.plans.find(item => item.id === e.target.value)
-        setPercent(plan.rate)
+        const id = Number(e.target.value);
+        const { rate, max, min } = data.plans.find(item => item.id === id)
+        setPercent(rate)
+        setAmount([max, min])
         setRate(e.target.value)
     }
 
@@ -119,7 +122,37 @@ export default function Trade(){
                                         transition={{ duration: .1 }}
                                     >
                                         <label>Price</label>
-                                        <Field type="text" id="price" name="price" />
+                                        <Field
+                                            type="number" 
+                                            id="price" 
+                                            name="price" 
+                                            placeholder="Price"
+                                            onChange={ (e) => { 
+                                                //check if value is minimum of amount[1] and below maximum of amount[0]
+                                                if (e.target.value < amount[1]) {
+                                                    setErrors(prev => {
+                                                        return {
+                                                            ...prev,
+                                                            price: ['Price is below minimum']
+                                                        }
+                                                    })
+                                                } else if (e.target.value > amount[0]) {
+                                                    setErrors(prev => {
+                                                        return {
+                                                            ...prev,
+                                                            price: ['Price is above maximum']
+                                                        }
+                                                    })
+                                                } else {
+                                                    setErrors(prev => {
+                                                        return {
+                                                            ...prev,
+                                                            price: []
+                                                        }
+                                                    })
+                                                }
+                                             }}
+                                            />
                                         <ErrorMessage name="price" component="span" className="error-message text-red-500 font-light" />
                                         {errors.price && (
                                             <span className="error-message text-red-500 font-light">{errors.price[0]}</span>
