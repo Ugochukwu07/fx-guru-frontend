@@ -1,26 +1,30 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { motion } from "framer-motion";
+import { Link, useNavigate } from 'react-router-dom';
 
 import TabLayout from '#/view/layout/TabLayout';
-import {exchangeSchema} from '../../../utility/validation/exchange'
 
 import './trade.scss'
+
+import { ToastContainer, toast, Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import chart from '../../../assets/icons/mini-chart.svg'
 import swap from '../../../assets/icons/ri_swap-fill.svg'
 import nodata from '../../../assets/icons/nodata.svg'
 import { useEffect, useState } from 'react';
 import Price from '../../../components/price/Price';
-import { Link } from 'react-router-dom';
-import { getOptionsBalance } from '../../../service/UserService';
+import { getOptionsBalance, startTrade } from '../../../service/UserService';
 import { useSelector } from 'react-redux';
+import LoadingSpinner from "../../layout/Loading";
 
 export default function Trade(){
     const {token} = useSelector(state => state.login)
+    const navigate = useNavigate();
 
     const [errors, setErrors] = useState({});
     const [currency, setCurrency] = useState([]);
     const [rate, setRate] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         balance: 0,
         currencies: [],
@@ -29,6 +33,12 @@ export default function Trade(){
     const [tradeMode, setTradeMode] = useState(true);
     const [percent, setPercent] = useState(0);
     const [amount, setAmount] = useState([0,0]);
+    const [form, setForm] = useState({
+        action: true,
+        amount: 0,
+        time: 0,
+        rate: 0
+    })
 
     useEffect(() => {
         getOptionsBalance(token).then(data => {
@@ -49,19 +59,68 @@ export default function Trade(){
     //     }
     // }, [data.currencies]);
 
-    const handleTradeMode = (prev) => setTradeMode(!prev)
+    const handleModeChange = (e) => {
+        const {symbol, id} = data.currencies.find(item => item.id == e.target.value)
+        setCurrency(symbol)
+        setForm((prev) => {
+            return {
+                ...prev,
+                mode: id
+            }
+        })
+    }
 
-    const handleModeChange = (e) => setCurrency(e.target.value)
     const handleRateChange = (e) => {
         const id = Number(e.target.value);
         const { rate, max, min } = data.plans.find(item => item.id === id)
         setPercent(rate)
         setAmount([max, min])
         setRate(e.target.value)
+        setForm((prev) => {
+            return {
+                ...prev,
+                rate: id
+            }
+        })
+    }
+
+    const handleSubmit = () => {
+        setLoading(true)
+        startTrade(token, form).then(response => {
+            setLoading(false)
+            console.log(response.status);
+            if(response.success){
+                toast.success(response.message);
+                setErrors({});
+            }else{
+                toast.error(response.message);
+                (response.status == 401) && setErrors(response.errors);
+            }
+            return response
+        }).then(response => {
+            console.log(response.data);
+            if(response.success){
+                setTimeout(() => {
+                    navigate('/active', {
+                        state: {
+                            direction: form.action,
+                            amount: form.amount,
+                            time: form.time,
+                            currency: currency,
+                            trade: response.data
+                        }
+                    });
+                }, 2500);
+            }
+        }).catch(err => {
+            setLoading(false)
+            toast.error(err?.response?.data.message)
+        })
     }
 
     return (
         <TabLayout nav={'trade'}>
+        <ToastContainer />
             <div className='exchange trade'>
                 <div className='exchange_title'>
                     <div className='box'>
@@ -75,137 +134,134 @@ export default function Trade(){
                 <div className="flex exchange_body">
                     <div className="w-1/2 exchange_body__execute">
                         <div className='title'>
-                            <span onClick={() => setTradeMode(true)} className={`up ${tradeMode && 'active'}`}>Buy</span>
-                            <span onClick={() => setTradeMode(false)} className={`down ${!tradeMode && 'active'}`}>Sell</span>
+                            <span onClick={() => {
+                                setTradeMode(true)
+                                setForm(prev => {
+                                    return {
+                                        ...prev,
+                                        action: tradeMode
+                                    }
+                                })
+                            }} className={`up ${tradeMode && 'active'}`}>Buy</span>
+                            <span onClick={() => {
+                                setTradeMode(false)
+                                setForm(prev => {
+                                    return {
+                                        ...prev,
+                                        action: tradeMode
+                                    }
+                                })
+                            }} className={`down ${!tradeMode && 'active'}`}>Sell</span>
                         </div>
-                        <div className="form">
-                            <Formik
-                                initialValues={{
-                                    time: data.plans[0]?.id,
-                                    mode: data.currencies[0]?.symbol,
-                                    price: '',
-                                }}
-                                validationSchema={exchangeSchema}
-                                onSubmit={() => console.log('Submitted')}
-                            >
-                                <Form>
-                                    <motion.div 
-                                        className={`input_group ${errors.name ? 'border border-red-500' : ''} text-black`}
-                                        initial={{ opacity: 0, y: -100 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: .1 }}
+                        {
+                            loading ? (
+                                <LoadingSpinner />
+                            ) : (
+                            <div className="form">
+                                <motion.div 
+                                    className={`input_group ${errors.mode ? 'border border-red-500' : ''} text-black`}
+                                    initial={{ opacity: 0, y: -100 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: .1 }}
+                                >
+                                    <label>Transaction mode</label>
+                                    <select
+                                        name="mode"
+                                        onChange={handleModeChange}
+                                        required
                                     >
-                                        <label>Transaction mode</label>
-                                        <Field 
-                                            as="select" 
-                                            name="mode"
-                                            onChange={handleModeChange}
-                                        >
-                                            <option></option>
-                                            {
-                                                data.currencies.map((value, index) => (
-                                                    <option key={index}>
-                                                        {value.symbol}
-                                                    </option>
-                                                ))
-                                            }
-                                        </Field>
-                                        <ErrorMessage name="name" component="span" className="error-message text-red-500 font-light" />
-                                        {errors.name && (
-                                            <span className="error-message text-red-500 font-light">{errors.name[0]}</span>
-                                        )}
-                                    </motion.div>
-                                    <motion.div 
-                                        className={`input_group ${errors.name ? 'border border-red-500' : ''}`}
-                                        initial={{ opacity: 0, y: -100 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: .1 }}
-                                    >
-                                        <label>Price</label>
-                                        <Field
-                                            type="number" 
-                                            id="price" 
-                                            name="price" 
-                                            placeholder="Price"
-                                            onChange={ (e) => { 
-                                                //check if value is minimum of amount[1] and below maximum of amount[0]
-                                                if (e.target.value < amount[1]) {
-                                                    setErrors(prev => {
-                                                        return {
-                                                            ...prev,
-                                                            price: ['Price is below minimum']
-                                                        }
-                                                    })
-                                                } else if (e.target.value > amount[0]) {
-                                                    setErrors(prev => {
-                                                        return {
-                                                            ...prev,
-                                                            price: ['Price is above maximum']
-                                                        }
-                                                    })
-                                                } else {
-                                                    setErrors(prev => {
-                                                        return {
-                                                            ...prev,
-                                                            price: []
-                                                        }
-                                                    })
+                                        <option></option>
+                                        {
+                                            data.currencies.map((value, index) => (
+                                                <option value={value.id} key={index} selected={value.symbol == currency}>
+                                                    {value.symbol}
+                                                </option>
+                                            ))
+                                        }
+                                    </select>
+                                    {errors.mode && (
+                                        <span className="error-message text-red-500 font-light">{errors.mode[0]}</span>
+                                    )}
+                                </motion.div>
+
+                                <motion.div 
+                                    className={`input_group ${errors.amount ? 'border border-red-500' : ''}`}
+                                    initial={{ opacity: 0, y: -100 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: .1 }}
+                                >
+                                    <label>Price</label>
+                                    <input
+                                        type="number" 
+                                        id="price" 
+                                        name="price" 
+                                        placeholder="Price"
+                                        min={amount[1]}
+                                        max={amount[0]}
+                                        required
+                                        onChange={(e) => {
+                                            setForm(prev => {
+                                                return {
+                                                    ...prev,
+                                                    amount: e.target.valueAsNumber
                                                 }
-                                             }}
-                                            />
-                                        <ErrorMessage name="price" component="span" className="error-message text-red-500 font-light" />
-                                        {errors.price && (
-                                            <span className="error-message text-red-500 font-light">{errors.price[0]}</span>
-                                        )}
-                                        <span className='eye-icon'>{ currency }</span>
-                                    </motion.div>
-                                    <motion.div 
-                                        className={`input_group mb-0 ${errors.name ? 'border border-red-500' : ''}`}
-                                        initial={{ opacity: 0, y: -100 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: .1 }}
+                                            })
+                                        }}
+                                    />
+                                    {errors.amount && (
+                                        <span className="error-message text-red-500 font-light">{errors.amount[0]}</span>
+                                    )}
+                                    <span className='eye-icon'>{ currency }</span>
+                                </motion.div>
+                                <motion.div 
+                                    className={`input_group mb-0 ${errors.time ? 'border border-red-500' : ''}`}
+                                    initial={{ opacity: 0, y: -100 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: .1 }}
+                                >
+                                    <label>Open time</label>
+                                    <select
+                                        name="time"
+                                        onChange={handleRateChange}
+                                        required
                                     >
-                                        <label>Open time</label>
-                                        <Field 
-                                            as="select" 
-                                            name="time"
-                                            onChange={handleRateChange}
-                                        >
-                                            {
-                                                data.plans.map((item, key) => {
-                                                    return (<option key={key} value={item.id}>{item.name}</option>)
-                                                })
-                                            }
-                                        </Field>
-                                        <ErrorMessage name="time" component="span" className="error-message text-red-500 font-light" />
-                                        {errors.time && (
-                                            <span className="error-message text-red-500 font-light">{errors.time[0]}</span>
-                                        )}
-                                    </motion.div>
-                                    <span className='text-xs mb-16'>Profit rate {percent}%</span>
-                                    <br /><br />
-                                    <div className='info'>
-                                        <div className='info_block flex justify-between'>
-                                            <span>Available</span>
-                                            <span>{data.balance} {currency}</span>
-                                        </div>
-                                        <div className='info_block flex justify-between'>
-                                            <span>Volume</span>
-                                            <span>O {currency}</span>
-                                        </div>
+                                        <option></option>
+                                        {
+                                            data.plans.map((value, index) => (
+                                                <option value={value.id} key={index}>
+                                                    {value.name}
+                                                </option>
+                                            ))
+                                        }
+                                    </select>
+                                    {errors.time && (
+                                        <span className="error-message text-red-500 font-light">{errors.time[0]}</span>
+                                    )}
+                                </motion.div>
+                                <span className='text-xs mb-16'>Profit rate {percent}%</span>
+                                <br /><br />
+                                <div className='info'>
+                                    <div className='info_block flex justify-between'>
+                                        <span>Available</span>
+                                        <span>{data.balance} {currency}</span>
                                     </div>
-                                    <motion.div className='btn-group'
-                                        initial={{ opacity: 0, y: -100 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: .5 }}
-                                    >
-                                        <button className={`btn ${tradeMode ? 'btn-up' : 'btn-down'} text-white btn-buy`} type="submit" >
-                                            {tradeMode ? 'BUY' : 'SELL'}/{currency}
-                                        </button>
-                                    </motion.div>
-                                </Form>
-                            </Formik>
-                        </div>
+                                    <div className='info_block flex justify-between'>
+                                        <span>Volume</span>
+                                        <span>0 {currency}</span>
+                                    </div>
+                                </div>
+                                <motion.div className='btn-group'
+                                    initial={{ opacity: 0, y: -100 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: .5 }}
+                                >
+                                    <button type='button' className={`btn ${tradeMode ? 'btn-up' : 'btn-down'} text-white btn-buy`} onClick={handleSubmit} >
+                                        {tradeMode ? 'BUY' : 'SELL'}/{currency}
+                                    </button>
+                                </motion.div>
+                            </div>
+                            )
+                        }
                     </div>
                     <div className="w-1/2 exchange_body__price">
                         <div className='title'>

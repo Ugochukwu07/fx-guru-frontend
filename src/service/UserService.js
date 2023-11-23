@@ -70,3 +70,17 @@ export async function getOptionsBalance(token) {
     throw error;
   }
 }
+
+export async function startTrade(token, formData) {
+  try {
+    const response = await request.post('/v1/trade/save', formData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
