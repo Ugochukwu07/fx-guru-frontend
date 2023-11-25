@@ -86,6 +86,12 @@ export default function Trade(){
 
     const handleSubmit = () => {
         setLoading(true)
+        if(form.amount < amount[1] || form.amount > amount[0]){
+            toast.error('Amount must be between ' + amount[1] + ' and ' + amount[0]);
+            setErrors({price: ['Amount must be between ' + amount[1] + ' and ' + amount[0]]});
+            setLoading(false)
+            return;
+        }
         startTrade(token, form).then(response => {
             setLoading(false)
             console.log(response.status);
@@ -153,103 +159,107 @@ export default function Trade(){
                                 })
                             }} className={`down ${!tradeMode && 'active'}`}>DOWN</span>
                         </div>
-                        {
-                            loading ? (
-                                <LoadingSpinner />
-                            ) : (
                             <div className="form">
-                                <motion.div 
-                                    className={`input_group ${errors.mode ? 'border border-red-500' : ''} text-black`}
-                                    initial={{ opacity: 0, y: -100 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: .1 }}
-                                >
-                                    <label>Transaction mode</label>
-                                    <select
-                                        name="mode"
-                                        onChange={handleModeChange}
-                                        required
-                                    >
-                                        <option></option>
-                                        {
-                                            data.currencies.map((value, index) => (
-                                                <option value={value.id} key={index} selected={value.symbol == currency}>
-                                                    {value.symbol}
-                                                </option>
-                                            ))
-                                        }
-                                    </select>
-                                    {errors.mode && (
-                                        <span className="error-message text-red-500 font-light">{errors.mode[0]}</span>
-                                    )}
-                                </motion.div>
+                                {
+                                    loading ? (
+                                        <LoadingSpinner />
+                                    ) : (
+                                        <>
+                                            <motion.div 
+                                                className={`input_group ${errors.mode ? 'border border-red-500' : ''} text-black`}
+                                                initial={{ opacity: 0, y: -100 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: .1 }}
+                                            >
+                                                <label>Transaction mode</label>
+                                                <select
+                                                    name="mode"
+                                                    onChange={handleModeChange}
+                                                    required
+                                                >
+                                                    <option></option>
+                                                    {
+                                                        data.currencies.map((value, index) => (
+                                                            <option value={value.id} key={index} selected={value.symbol == currency}>
+                                                                {value.symbol}
+                                                            </option>
+                                                        ))
+                                                    }
+                                                </select>
+                                                {errors.mode && (
+                                                    <span className="error-message text-red-500 font-light">{errors.mode[0]}</span>
+                                                )}
+                                            </motion.div>
 
-                                <motion.div 
-                                    className={`input_group ${errors.amount ? 'border border-red-500' : ''}`}
-                                    initial={{ opacity: 0, y: -100 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: .1 }}
-                                >
-                                    <label>Price</label>
-                                    <input
-                                        type="number" 
-                                        id="price" 
-                                        name="price" 
-                                        placeholder="Price"
-                                        min={amount[1]}
-                                        max={amount[0]}
-                                        required
-                                        onChange={(e) => {
-                                            setForm(prev => {
-                                                return {
-                                                    ...prev,
-                                                    amount: e.target.valueAsNumber
-                                                }
-                                            })
-                                        }}
-                                    />
-                                    {errors.amount && (
-                                        <span className="error-message text-red-500 font-light">{errors.amount[0]}</span>
-                                    )}
-                                    <span className='eye-icon'>{ currency }</span>
-                                </motion.div>
-                                <motion.div 
-                                    className={`input_group mb-0 ${errors.time ? 'border border-red-500' : ''}`}
-                                    initial={{ opacity: 0, y: -100 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: .1 }}
-                                >
-                                    <label>Open time</label>
-                                    <select
-                                        name="time"
-                                        onChange={handleRateChange}
-                                        required
-                                    >
-                                        <option></option>
-                                        {
-                                            data.plans.map((value, index) => (
-                                                <option value={value.id} key={index}>
-                                                    {value.name}
-                                                </option>
-                                            ))
-                                        }
-                                    </select>
-                                    {errors.time && (
-                                        <span className="error-message text-red-500 font-light">{errors.time[0]}</span>
-                                    )}
-                                </motion.div>
-                                <span className='text-xs mb-16'>Profit rate {percent}%</span>
-                                <br /><br />
-                                <div className='info'>
-                                    <div className='info_block flex justify-between'>
-                                        <span>Available</span>
-                                        <span>{data.balance} {currency}</span>
-                                    </div>
-                                    <div className='info_block flex justify-between'>
-                                        <span>Volume</span>
-                                        <span>0 {currency}</span>
-                                    </div>
-                                </div>
+                                            <motion.div 
+                                                className={`input_group ${errors.amount ? 'border border-red-500' : ''}`}
+                                                initial={{ opacity: 0, y: -100 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: .1 }}
+                                            >
+                                                <label>Price</label>
+                                                <input
+                                                    type="number" 
+                                                    id="price" 
+                                                    name="price" 
+                                                    placeholder="Price"
+                                                    min={amount[1]}
+                                                    max={amount[0]}
+                                                    required
+                                                    onChange={(e) => {
+                                                        setForm(prev => {
+                                                            return {
+                                                                ...prev,
+                                                                amount: e.target.valueAsNumber
+                                                            }
+                                                        })
+                                                    }}
+                                                />
+                                                {errors.amount && (
+                                                    <span className="error-message text-red-500 font-light">{errors.amount[0]}</span>
+                                                )}
+                                                <span className='eye-icon'>{ currency }</span>
+                                            </motion.div>
+                                            <motion.div 
+                                                className={`input_group mb-0 ${errors.time ? 'border border-red-500' : ''}`}
+                                                initial={{ opacity: 0, y: -100 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: .1 }}
+                                            >
+                                                <label>Open time</label>
+                                                <select
+                                                    name="time"
+                                                    onChange={handleRateChange}
+                                                    required
+                                                >
+                                                    <option></option>
+                                                    {
+                                                        data.plans.map((value, index) => (
+                                                            <option value={value.id} key={index}>
+                                                                {value.name}
+                                                            </option>
+                                                        ))
+                                                    }
+                                                </select>
+                                                {errors.time && (
+                                                    <span className="error-message text-red-500 font-light">{errors.time[0]}</span>
+                                                )}
+                                            </motion.div>
+                                            <span className='text-xs mb-16'>Profit rate {percent}%</span>
+                                            <br /><br />
+                                            <div className='info'>
+                                                <div className='info_block flex justify-between'>
+                                                    <span>Available</span>
+                                                    <span>{data.balance} {currency}</span>
+                                                </div>
+                                                <div className='info_block flex justify-between'>
+                                                    <span>Volume</span>
+                                                    <span>0 {currency}</span>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )
+                                }
                                 <motion.div className='btn-group'
                                     initial={{ opacity: 0, y: -100 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -260,8 +270,6 @@ export default function Trade(){
                                     </button>
                                 </motion.div>
                             </div>
-                            )
-                        }
                     </div>
                     <div className="w-1/2 exchange_body__price">
                         <div className='title'>
