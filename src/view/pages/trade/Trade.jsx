@@ -142,7 +142,7 @@ export default function Trade(){
                                         action: tradeMode
                                     }
                                 })
-                            }} className={`up ${tradeMode && 'active'}`}>Buy</span>
+                            }} className={`up ${tradeMode && 'active'}`}>UP</span>
                             <span onClick={() => {
                                 setTradeMode(false)
                                 setForm(prev => {
@@ -151,7 +151,7 @@ export default function Trade(){
                                         action: tradeMode
                                     }
                                 })
-                            }} className={`down ${!tradeMode && 'active'}`}>Sell</span>
+                            }} className={`down ${!tradeMode && 'active'}`}>DOWN</span>
                         </div>
                         {
                             loading ? (
@@ -256,7 +256,7 @@ export default function Trade(){
                                     transition={{ duration: .5 }}
                                 >
                                     <button type='button' className={`btn ${tradeMode ? 'btn-up' : 'btn-down'} text-white btn-buy`} onClick={handleSubmit} >
-                                        {tradeMode ? 'BUY' : 'SELL'}/{currency}
+                                        {tradeMode ? 'BUY UP' : 'SELL DOWN'}
                                     </button>
                                 </motion.div>
                             </div>
