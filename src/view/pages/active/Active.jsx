@@ -19,7 +19,6 @@ export default function Active(){
     useEffect(() => {
         const intervalID = setInterval(() => {
             setAngle(prev => (prev + 1) % 360);
-            setTimeRemaining(prev => prev-trade.plan_id.time)
         }, 1000)
         
         return clearInterval(intervalID)
@@ -37,14 +36,17 @@ export default function Active(){
                 </span>
             </div>
             <div className='active_page_body'>
-                <div className='circle_timer' style={{ transform: `rotate(${angle}deg)`, animationDuration: `${trade.plan_id.time}s` }}>
+                <div className='wrapper relative'>
+                    <div className='iconn absolute'>
+                        <div className='circle_timer' style={{ transform: `rotate(${angle}deg)`, animationDuration: `${trade.plan_id.time}s` }}>
+                        </div>
+                    </div>
+                    <div className='circle-info'>
+                        <span className='time'>{timeRemaining}</span>
+                        <span>Current Price</span>
+                        <span className='up'>16960.6700</span>
+                    </div>
                 </div>
-                <div className=''>
-                    <span className='time'>{timeRemaining}</span>
-                    <span>Current Price</span>
-                    <span className='up'>16960.6700</span>
-                </div>
-
                 <div className='grid info text-left grid-cols-2'>
                     <span>Direction</span>
                     <span className='up'>Up</span>
