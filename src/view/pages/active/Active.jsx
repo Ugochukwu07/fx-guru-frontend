@@ -25,6 +25,14 @@ export default function Active(){
     }, [])
 
 
+    //countdown function that will take seconds as argument
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+          setTimeRemaining((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+        }, 1000);
+        return () => clearInterval(intervalId); // Cleanup on component unmount
+      }, []);
+
     console.log(state);
 
     return (
@@ -49,9 +57,9 @@ export default function Active(){
                 </div>
                 <div className='grid info text-left grid-cols-2'>
                     <span>Direction</span>
-                    <span className='up'>Up</span>
+                    <span className={ state.direction ? 'up' : 'down'}>{state.direction ? 'UP' : 'DOWN'}</span>
                     <span>Amount</span>
-                    <span>169</span>
+                    <span>{state.amount}</span>
                     <span>Purchase price</span>
                     <span>16960.0204</span>
                     <span>Profit and Loss</span>
