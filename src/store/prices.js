@@ -37,7 +37,7 @@ const action = {
 }
 
 const initialState = {
-    prices: {},
+    prices: [],
     isLoading: false,
     error: null,
     success: false,

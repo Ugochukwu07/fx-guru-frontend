@@ -58,7 +58,7 @@ export default function Market(){
                                             <span className='table__price up'>{ toSignificantFigures(coin.price, 5) }</span>
                                         </td>
                                         <td>
-                                            <span className='table__change'>{coin.change}%</span>
+                                            <span className='table__change' style={{ color: coin.color }}>{coin.change}%</span>
                                             <img className='table__change__img' src={arrow_up} />
                                         </td>
                                     </tr>
