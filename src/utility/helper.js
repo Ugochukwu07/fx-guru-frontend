@@ -1,4 +1,4 @@
-export default function generateNumbers(num, rate) {
+export function generateNumbers(num, rate) {
     const result = { above: [], below: [] };
 
     for (let i = 0; i < 16; i++) {
@@ -25,4 +25,14 @@ export default function generateNumbers(num, rate) {
     return result;
 }
 
+export function toSignificantFigures(number, significantFigures) {
+    const parsedNumber = parseFloat(number);
+    if (isNaN(parsedNumber)) {
+        console.error('Invalid number:', number);
+        return NaN;
+    }
+
+    const fixedNotation = parsedNumber.toExponential(significantFigures - 1);
+    return parseFloat(fixedNotation);
+  }
   

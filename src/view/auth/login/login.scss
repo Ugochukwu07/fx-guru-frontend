@@ -1,5 +1,7 @@
 .login{
-    transform: translateY(20%);
+    // transform: translateY(20%);
+    // height: 100vh;
+    overflow-y: hidden;
     .title{
         font-size: 15px;
     }

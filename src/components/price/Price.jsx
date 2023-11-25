@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import generateNumbers from "../../utility/helper";
+import {generateNumbers} from "../../utility/helper";
 
 export default function Price(probs){
     const [data, setData] = useState(probs.data)

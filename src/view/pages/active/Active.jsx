@@ -14,8 +14,6 @@ export default function Active(){
     const [angle, setAngle] = useState(0)
     const [timeRemaining, setTimeRemaining] = useState(trade.plan_id.time)
 
-    //trade.plan_id.time is the total time, total time equals 360deg, so 1deg = trade.plan_id.time / 360
-
     useEffect(() => {
         const intervalID = setInterval(() => {
             setAngle(prev => (prev + 1) % 360);
@@ -24,13 +22,11 @@ export default function Active(){
         return clearInterval(intervalID)
     }, [])
 
-
-    //countdown function that will take seconds as argument
     useEffect(() => {
         const intervalId = setInterval(() => {
           setTimeRemaining((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
         }, 1000);
-        return () => clearInterval(intervalId); // Cleanup on component unmount
+        return () => clearInterval(intervalId);
       }, []);
 
     console.log(state);

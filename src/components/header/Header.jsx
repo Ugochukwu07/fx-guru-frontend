@@ -1,6 +1,7 @@
 import logo from '../../assets/login.png'
 import avatar from '../../assets/avatar.png'
 import './header.scss'
+import { Link } from 'react-router-dom'
 
 function Header(){
     return (
@@ -8,9 +9,11 @@ function Header(){
             <div className='logo'>
                 <img src={logo} />
             </div>
-            <div className='avatar'>
-                <img src={avatar} />
-            </div>
+            <Link to={'/'}>
+                <div className='avatar'>
+                    <img src={avatar} />
+                </div>
+            </Link>
         </div>
     )
 }
