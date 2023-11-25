@@ -6,27 +6,29 @@ import arrow_up from '../../assets/icons/arrow-up.svg'
 import litecoin from '../../assets/icons/litecoin.svg'
 import sol from '../../assets/icons/sol.svg'
 import xrp from '../../assets/icons/xrp.svg'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { getCoinList } from '../../service/coinService'
 import { toSignificantFigures } from '../../utility/helper'
 import { useDispatch, useSelector } from 'react-redux'
-import { prices } from "#/store/prices"
-
+import { prices } from '../../store/prices'
 
 export default function Market(){
-    const coins = useSelector(state => state.prices.prices.coins)
+    const coins = useSelector(state => state.prices.prices)
     const dispatch = useDispatch();
 
-    // console.log(coins);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const coinPrices = () => {
             dispatch(prices.actions.getCoinList()).then((result) => {
-                dispatch(prices.actions.pricesSuccess(result.payload.coins))
+                dispatch(prices.mutations.pricesSuccess(result.payload.coins))
             })
+            console.log(coins);
+
         }
-        coinPrices()
-    }, [coins, dispatch])
+        if(coins.length === 0){
+            coinPrices()
+        }
+    })
 
     return (
         <div className='market'>

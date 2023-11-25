@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { toSignificantFigures } from '../../utility/helper'
 
 export default function Major(){
-    const coins = useSelector(state => state.prices.prices.coins)
+    const coins = useSelector(state => state.prices.prices)
     const [featured, setFeatured] = useState([])
 
     useEffect(() => {

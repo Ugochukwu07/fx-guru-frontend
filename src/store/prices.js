@@ -69,7 +69,6 @@ const pricesSlice = createSlice({
             state.success = false;
         });
         builder.addCase(action.getCoinList.fulfilled, (state, { payload }) => {
-            state.prices = payload;
             state.isLoading = false;
             state.success = true;
         });
