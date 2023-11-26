@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
+    "@trendyol-js/react-carousel": "^3.0.2",
     "axios": "^1.6.1",
     "clipboard-copy": "^4.0.1",
     "formik": "^2.4.5",

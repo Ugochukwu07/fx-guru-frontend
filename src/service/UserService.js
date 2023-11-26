@@ -98,3 +98,17 @@ export async function getTradeHistory(token){
     throw error;
   }
 }
+
+export async function withdraw(token, formData){
+  try {
+    const response = await request.post('/v1/user/withdraw', formData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
