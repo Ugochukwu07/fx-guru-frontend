@@ -18,7 +18,9 @@ import { useSelector } from 'react-redux';
 import LoadingSpinner from "../../layout/Loading";
 
 export default function Trade(){
-    const {token} = useSelector(state => state.login)
+    const state = useSelector(state => state)
+    const {token} = state.login
+
     const navigate = useNavigate();
     const navigate2 = useNavigate();
     const navigate3 = useNavigate();
@@ -26,6 +28,9 @@ export default function Trade(){
     const [errors, setErrors] = useState({});
     const [currency, setCurrency] = useState([]);
     const [rate, setRate] = useState([]);
+    const [market, setMarket] = useState([
+        1621, 0.2
+    ]);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         balance: 0,
@@ -58,6 +63,16 @@ export default function Trade(){
                     plans: data.plans
                 }
             })
+            return data
+        }).then(data => {
+            const {symbol} = data.currencies[0]
+            setCurrency(symbol)
+            const { rate } = data.plans[0]
+            setPercent(rate)
+        }).then(() => {
+            const coin = state.prices.prices.find(item => item.symbol === currency)
+            console.log(coin, state, currency);
+            setMarket([coin.price, coin.change])
         })
 
         getTradeHistory(token).then(data => {
@@ -186,12 +201,11 @@ export default function Trade(){
                                                     required
                                                     // value={currency}
                                                 >
-                                                    <option></option>
                                                     {
                                                         data.currencies.map((value, index) => (
                                                             <option value={value.id} key={index}>
                                                                 {value.symbol}
-                                                        </option>
+                                                            </option>
                                                         ))
                                                     }
                                                 </select>
@@ -241,7 +255,6 @@ export default function Trade(){
                                                     onChange={handleRateChange}
                                                     required
                                                 >
-                                                    <option></option>
                                                     {
                                                         data.plans.map((value, index) => (
                                                             <option value={value.id} key={index}>
@@ -284,7 +297,7 @@ export default function Trade(){
                         <div className='title'>
                             <h2 className='up'>{data.balance} <span>USDT</span></h2>
                         </div>
-                        <Price data={{ price: 1678, rate: 2 }} />
+                        <Price data={{ price: market[0], rate: market[1] }} />
                     </div>
                 </div>
                 <div className='w-full history'>
