@@ -266,7 +266,7 @@ export default function Trade(){
                                     transition={{ duration: .5 }}
                                 >
                                     <button type='button' className={`btn ${tradeMode ? 'btn-up' : 'btn-down'} text-white btn-buy`} onClick={handleSubmit} >
-                                        {tradeMode ? 'BUY UP' : 'SELL DOWN'}
+                                        {tradeMode ? `${currency} UP` : `DOWN ${currency}`}
                                     </button>
                                 </motion.div>
                             </div>
