@@ -16,12 +16,26 @@ import help from '#/assets/icons/help.svg'
 import savings from '#/assets/icons/savings.svg'
 import start_trading from '#/assets/start_trading.png'
 import { useContext, useEffect } from "react"
-import { useDispatch } from "react-redux"
+import Slider from "react-slick";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 function Home(){
     useEffect(() => {
         document.title = 'Home | BitPay'
     }, [])
+
+    var settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        adaptiveHeight: true,
+        autoplay: true
+      };
 
     return (
         <TabLayout nav={"home"}>
@@ -32,11 +46,24 @@ function Home(){
             >
                 <Header />
                 <Notification />
-                <div className='start_trading' style={{ backgroundImage: `url(${start_trading})` }}>
-                    <h3 className='h3 '>Become a GURU</h3>
-                    <h1 className='h1'>Trusted and Secure bitcoin and crypto exchange</h1>
-                    <Link to={'/trade'} className='btn btn-main'>Start Trading</Link>
-                </div>
+                <Slider {...settings}>
+                    <div className='start_trading' style={{ backgroundImage: `url(${start_trading})` }}>
+                        {/* <img src={start_trading} /> */}
+                        <h3 className='h3 '>Become a GURU</h3>
+                        <h1 className='h1'>Trusted and Secure bitcoin and crypto exchange</h1>
+                        <Link to={'/trade'} className='btn btn-main'>Start Trading</Link>
+                    </div>
+                    <div className='start_trading' style={{ backgroundImage: `url(${start_trading})` }}>
+                        <h3 className='h3 '>Join the Amazing Crypto</h3>
+                        <h1 className='h1'>A new way to earn swiftly with crypto currencies</h1>
+                        <Link to={'/trade'} className='btn btn-main'>Start Now</Link>
+                    </div>
+                    <div className='start_trading' style={{ backgroundImage: `url(${start_trading})` }}>
+                        <h3 className='h3 '>Join the Amazing Crypto</h3>
+                        <h1 className='h1'>A new way to earn swiftly with crypto currencies</h1>
+                        <Link to={'/trade'} className='btn btn-main'>Start Now</Link>
+                    </div>
+                </Slider>
                 <Major />
                 <div className='actions'>
                     <div className='action'>

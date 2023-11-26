@@ -12,6 +12,16 @@
     background-position: center;
     padding: 2rem 15px;
     border-radius: 5px;
+    background-image: url('../../../assets/start_trading.png');
+    // width: 90%;
+    img{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        // width: 200px;
+    }
     .h3{
         color: #F36103;
         font-size: 23px;
