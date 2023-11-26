@@ -11,6 +11,7 @@ import { getCoinList } from '../../service/coinService'
 import { toSignificantFigures } from '../../utility/helper'
 import { useDispatch, useSelector } from 'react-redux'
 import { prices } from '../../store/prices'
+import { Link } from 'react-router-dom'
 
 export default function Market(){
     const coins = useSelector(state => state.prices.prices)
@@ -50,18 +51,24 @@ export default function Market(){
                                 return (
                                     <tr key={index}>
                                         <td>
+                                            <Link to={'/trade'}>
                                             <div className='table__pairs'>
                                                 <img src={coin.iconUrl} />
                                                 <span>{coin.name}<span>{coin.symbol}</span></span>
                                                 <img className='table_charts' src={btc_chart} />
                                             </div>
+                                            </Link>
                                         </td>
                                         <td>
+                                            <Link to={'/trade'}>
                                             <span className='table__price up'>{ toSignificantFigures(coin.price, 5) }</span>
+                                            </Link>
                                         </td>
                                         <td>
+                                            <Link to={'/trade'}>
                                             <span className='table__change' style={{ color: coin.color }}>{coin.change}%</span>
                                             <img className='table__change__img' src={arrow_up} />
+                                            </Link>
                                         </td>
                                     </tr>
                                 )

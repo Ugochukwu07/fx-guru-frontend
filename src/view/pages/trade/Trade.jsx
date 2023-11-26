@@ -13,13 +13,15 @@ import swap from '../../../assets/icons/ri_swap-fill.svg'
 import nodata from '../../../assets/icons/nodata.svg'
 import { useEffect, useState } from 'react';
 import Price from '../../../components/price/Price';
-import { getOptionsBalance, startTrade } from '../../../service/UserService';
+import { getOptionsBalance, getTradeHistory, startTrade } from '../../../service/UserService';
 import { useSelector } from 'react-redux';
 import LoadingSpinner from "../../layout/Loading";
 
 export default function Trade(){
     const {token} = useSelector(state => state.login)
     const navigate = useNavigate();
+    const navigate2 = useNavigate();
+    const navigate3 = useNavigate();
 
     const [errors, setErrors] = useState({});
     const [currency, setCurrency] = useState([]);
@@ -31,6 +33,7 @@ export default function Trade(){
         plans: [],
     });
     const [tradeMode, setTradeMode] = useState(true);
+    const [historyMode, setHistoryMode] = useState(true);
     const [percent, setPercent] = useState(0);
     const [amount, setAmount] = useState([0,0]);
     const [form, setForm] = useState({
@@ -39,8 +42,13 @@ export default function Trade(){
         time: 0,
         rate: 0
     })
+    const [tradeHistory, setTradeHistory] = useState({
+        completed: [],
+        pending: []
+    })
 
     useEffect(() => {
+        document.title = 'Trade | BitPay'
         getOptionsBalance(token).then(data => {
             setData(prev => {
                 return {
@@ -51,13 +59,11 @@ export default function Trade(){
                 }
             })
         })
-    }, [])
 
-    // useEffect(() => {
-    //     if (data.currencies.length > 0) {
-    //         setCurrency(data.currencies[0].symbol);
-    //     }
-    // }, [data.currencies]);
+        getTradeHistory(token).then(data => {
+            setTradeHistory(data)
+        });
+    }, [])
 
     const handleModeChange = (e) => {
         const {symbol, id} = data.currencies.find(item => item.id == e.target.value)
@@ -123,6 +129,8 @@ export default function Trade(){
             toast.error(err?.response?.data.message)
         })
     }
+
+    const intervalId = setInterval((time) => (time > 0 ? time - 1 : 0), 1000);
 
     return (
         <TabLayout nav={'trade'}>
@@ -280,11 +288,103 @@ export default function Trade(){
                 </div>
                 <div className='w-full history'>
                     <div className='history_tabs'>
-                        <span className='active'>Current Entrust</span>
-                        <span>History Entrust</span>
+                        <span onClick={() => setHistoryMode(true)} className={historyMode && 'active'}>Current Entrust</span>
+                        <span onClick={() => setHistoryMode(false)} className={`${!historyMode && 'active'}`}>History Entrust</span>
                     </div>
                     <div className='history_body px-0'>
-                        <Link to='/active'>
+                        <div>
+                            {
+                                !historyMode && tradeHistory.completed.map((item, index) => {
+                                    return (
+                                        <div onClick={
+                                            (item) => {
+                                                navigate2('/active', {
+                                                    state: {
+                                                        direction: item.direction,
+                                                        amount: item.amount,
+                                                        time: item.time_remaining,
+                                                        currency: currency,
+                                                        trade: item
+                                                    }
+                                                })
+                                            }
+                                        } key={index} className='order my-8'>
+                                            <div className='order_title'>
+                                                <span className='up'>{ item.direction ? 'LONG' : 'SHORT'}</span>
+                                                <span>{item.created_at}</span>
+                                            </div>
+                                            <div className='order_body grid grid-cols-3'>
+                                                <div className='information'>
+                                                    <span className='quote'>{ item.crypto.symbol }/USDT</span>
+                                                    <span className='price'>{ item.price }</span>
+                                                    <span>C2c. timer</span>
+                                                    <span className='price'>{ item.plan_id.name }</span>
+                                                </div>
+                                                <div className='numbers text-center'>
+                                                    <span>Amount</span>
+                                                    <span className='price'>{ item.amount}</span>
+                                                    <span>P/L[USDT]</span>
+                                                    <span className='up price'>0.0000</span>
+                                                </div>
+                                                <div className='current text-right'>
+                                                    <span>Current Price</span>
+                                                    <span className='up price'>16969.14</span>
+                                                    <span>Count down</span>
+                                                    <span className='price'>{ clearInterval(() => intervalId(item.time_remaining)) }</span>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                    )
+                                })
+                            }
+                            {
+                                historyMode && tradeHistory.pending.map((item, index) => {
+                                    return (
+                                        <div onClick={
+                                                (item) => {
+                                                    navigate3('/active', {
+                                                        state: {
+                                                            direction: item.direction,
+                                                            amount: item.amount,
+                                                            time: item.time_remaining,
+                                                            currency: currency,
+                                                            trade: item
+                                                        }
+                                                    })
+                                                }
+                                            } key={index} className='order my-8'>
+                                            <div className='order_title'>
+                                                <span className='up'>{ item.direction ? 'LONG' : 'SHORT'}</span>
+                                                <span>{item.created_at}</span>
+                                            </div>
+                                            <div className='order_body grid grid-cols-3'>
+                                                <div className='information'>
+                                                    <span className='quote'>{ item.crypto.symbol }/USDT</span>
+                                                    <span className='price'>{ item.price }</span>
+                                                    <span>C2c. timer</span>
+                                                    <span className='price'>{ item.plan_id.name }</span>
+                                                </div>
+                                                <div className='numbers text-center'>
+                                                    <span>Amount</span>
+                                                    <span className='price'>{ item.amount}</span>
+                                                    <span>P/L[USDT]</span>
+                                                    <span className='up price'>0.0000</span>
+                                                </div>
+                                                <div className='current text-right'>
+                                                    <span>Current Price</span>
+                                                    <span className='up price'>16969.14</span>
+                                                    <span>Count down</span>
+                                                    <span className='price'>{ clearInterval(() => intervalId(item.time_remaining)) }</span>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                        {/* <Link to='/active'>
                             <div className='order'>
                                 <div className='order_title'>
                                     <span className='up'>LONG</span>
@@ -311,7 +411,7 @@ export default function Trade(){
                                     </div>
                                 </div>
                             </div>
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </div>
