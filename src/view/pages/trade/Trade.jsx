@@ -184,13 +184,14 @@ export default function Trade(){
                                                     name="mode"
                                                     onChange={handleModeChange}
                                                     required
+                                                    // value={currency}
                                                 >
                                                     <option></option>
                                                     {
                                                         data.currencies.map((value, index) => (
-                                                            <option value={value.id} key={index} selected={value.symbol == currency}>
+                                                            <option value={value.id} key={index}>
                                                                 {value.symbol}
-                                                            </option>
+                                                        </option>
                                                         ))
                                                     }
                                                 </select>
