@@ -23,7 +23,7 @@ export default function Withdraw(){
     const [currenciesList, setCurrenciesList] = useState([])
     const [currentWallet, setCurrentWallet] = useState([]);
     const [currentNetwork, setCurrentNetwork] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [popup, setPopup] = useState(false)
     const [form, setForm] = useState({
         extractable: 0,

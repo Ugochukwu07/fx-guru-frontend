@@ -34,8 +34,9 @@ export default function Links(){
             text: "Logout",
             link: "/logout",
             handleClick: function (){
+                localStorage.removeItem('token')
                 localStorage.clear()
-                location.reload()
+                window.location.href = '/'
             }
         },
     ];
