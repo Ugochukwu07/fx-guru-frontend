@@ -53,13 +53,13 @@ function Home(){
                         <h1 className='h1'>Trusted and Secure bitcoin and crypto exchange</h1>
                         <Link to={'/trade'} className='btn btn-main'>Start Trading</Link>
                     </div>
-                    <div className='start_trading' style={{ backgroundImage: `url(${start_trading})` }}>
+                    <div className='start_trading first' style={{ backgroundImage: `url(${start_trading})` }}>
                         <h3 className='h3 '>Join the Amazing Crypto</h3>
                         <h1 className='h1'>A new way to earn swiftly with crypto currencies</h1>
                         <Link to={'/trade'} className='btn btn-main'>Start Now</Link>
                     </div>
-                    <div className='start_trading' style={{ backgroundImage: `url(${start_trading})` }}>
-                        <h3 className='h3 '>Join the Amazing Crypto</h3>
+                    <div className='start_trading last' style={{ backgroundImage: `url(${start_trading})` }}>
+                        <h3 className='h3 '>Become a Community Member</h3>
                         <h1 className='h1'>A new way to earn swiftly with crypto currencies</h1>
                         <Link to={'/trade'} className='btn btn-main'>Start Now</Link>
                     </div>

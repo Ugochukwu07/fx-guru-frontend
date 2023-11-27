@@ -69,7 +69,9 @@ export default function Trade(){
             setCurrency(symbol)
             const { rate } = data.plans[0]
             setPercent(rate)
-        }).then(() => {
+
+            return {currency}
+        }).then(({currency, rate}) => {
             const coin = state.prices.prices.find(item => item.symbol === currency)
             console.log(coin, state, currency);
             setMarket([coin.price, coin.change])
