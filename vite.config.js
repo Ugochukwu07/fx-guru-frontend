@@ -20,7 +20,7 @@ export default defineConfig({
       '/api': {
         target: 'https://api.bitfxpay.com/api',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/bitfx/, '')
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   },
