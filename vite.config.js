@@ -10,12 +10,17 @@ export default defineConfig({
       '#': fileURLToPath(new URL('./src', import.meta.url)),
     }
   },
-  server:{
-    proxy:{
-      '/api':{
+  server: {
+    proxy: {
+      '/api': {
         target: 'http://127.0.0.1:8002/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/bitfx': {
+        target: 'https://api.bitfxpay.com/api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/bitfx/, '')
       }
     }
   },
