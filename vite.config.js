@@ -12,12 +12,12 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // '/api': {
+      //   target: 'http://127.0.0.1:8002/api',
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(/^\/api/, '')
+      // },
       '/api': {
-        target: 'http://127.0.0.1:8002/api',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      },
-      '/bitfx': {
         target: 'https://api.bitfxpay.com/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/bitfx/, '')
