@@ -6,6 +6,7 @@ import contract from "../../../assets/icons/contract.svg"
 import option from "../../../assets/icons/option.svg"
 import history from "../../../assets/icons/history.svg"
 import logout from "../../../assets/icons/logout.svg"
+import { Link } from 'react-router-dom'
 
 export default function Links(){
     const linksArray = [
@@ -41,12 +42,14 @@ export default function Links(){
         },
     ];
     const myLinks = linksArray.map((item, index) => {
-        return <div key={index} onClick={item.handleClick}>
-            <li>
-                <img src={item.img} />
-                <span>{item.text}</span>
-            </li>        
-        </div>
+        return <Link to={item.link} key={index}>
+                <div key={index} onClick={item.handleClick}>
+                    <li>
+                        <img src={item.img} />
+                        <span>{item.text}</span>
+                    </li>        
+                </div>
+            </Link>
     });
 
     return (
