@@ -79,8 +79,8 @@ export default function Assets() {
                     <img className="profile__notification" src={notification} />
                 </div>
                 <div className="profile__info">
-                    <h3>{ accountType.text }</h3>
-                    <h1>{ accountType.balance }</h1>
+                    <h3>Total Assets</h3>
+                    <h1>{ user.balance }</h1>
                     <span>
                         <img src={arrow_up} />
                         105 (%0.8)
