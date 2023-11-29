@@ -23,10 +23,13 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     },
-    host: '0.0.0.0',
-    port: 5173,
+    
   },
   optimizeDeps: {
     exclude: ['js-big-decimal']
+  },
+  preview: {
+    host: '0.0.0.0',
+    
   }
 })
