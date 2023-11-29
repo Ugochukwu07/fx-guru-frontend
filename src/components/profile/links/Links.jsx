@@ -10,21 +10,21 @@ import { Link } from 'react-router-dom'
 
 export default function Links(){
     const linksArray = [
-        {
-            img: transfer_alt,
-            text: "Exchange Account",
-            link: "/exchange"
-        },
-        {
-            img: contract,
-            text: "Contract Account",
-            link: "/contract"
-        },
-        {
-            img: option,
-            text: "Option Account",
-            link: "/option"
-        },
+        // {
+        //     img: transfer_alt,
+        //     text: "Exchange Account",
+        //     link: "/exchange"
+        // },
+        // {
+        //     img: contract,
+        //     text: "Contract Account",
+        //     link: "/contract"
+        // },
+        // {
+        //     img: option,
+        //     text: "Option Account",
+        //     link: "/option"
+        // },
         {
             img: history,
             text: "Transaction History",
@@ -53,7 +53,7 @@ export default function Links(){
     });
 
     return (
-        <div className="profile_links">
+        <div className="profile_links mt-0 mb-0">
             <ul>{myLinks}</ul>
         </div>
     )

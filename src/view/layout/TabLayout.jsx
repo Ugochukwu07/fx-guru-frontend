@@ -21,7 +21,7 @@ export default function TabLayout({children, nav}){
         >
 
             <ScrollToTop />
-            <div style={{ minHeight: '100vh' }}>
+            <div style={{ minHeight: '50vh' }}>
                 {children}
             </div>
             <Nav home={(nav == 'home') && true} assets={(nav == 'assets') && true} trade={(nav == 'trade') && true} exchange={(nav == 'exchange') && true} />

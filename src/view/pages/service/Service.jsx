@@ -34,7 +34,7 @@ export default function Service() {
                 <Slider {...settings}>
                     <div className='service'>
                         <h3 className='h3 '>Unique Way to Trade</h3>
-                        <h1 className='h1'>Tap into BitPays Trading opportunity</h1>
+                        <h1 className='h1'>Buy cryptocurrency instantly. Fast, easy and secure.</h1>
                     </div>
                     <div className='service first'>
                         <h3 className='h3 '>Swift WIthdrawal Speed</h3>
@@ -47,7 +47,10 @@ export default function Service() {
                 </Slider>
                 <div className='info mt-8'>
                     <h2 className='font-extrabold'>How we work</h2>
-                    <p>A new way to earn swiftly with crypto currencies. A new way to earn swiftly with crypto currencies. A new way to earn swiftly with crypto currencies. A new way to earn swiftly with crypto currencies</p>
+                    <p>
+                        Buy, store, swap and spend cryptocurrency all in one app. Turn Bitcoin into dollars with the BitPay crypto debit card. Earn cash back automatically.
+                        Sign up to buy crypto at great rates. Buy, store, swap and spend your favorite crypto all in one secure app. Buy crypto with a credit card, debit card or Apple Pay. No hidden fees.
+                    </p>
                     <img src={service_one} />
                 </div>
             </div>

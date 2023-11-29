@@ -10,6 +10,9 @@ import Links from "#/components/profile/links/Links";
 
 import "./assets.scss";
 
+import contract from "#/assets/icons/contract.svg"
+import option from "#/assets/icons/option.svg"
+import transfer_alt from "#/assets/icons/transfer-alt.svg"
 import deposit from "#/assets/icons/deposit.svg";
 import transfer from "#/assets/icons/transfer.svg";
 import avatar from "#/assets/avatar.png";
@@ -22,7 +25,10 @@ export default function Assets() {
     
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true);
-    const [accountType, setAccountType] = useState();
+    const [profileType, setProfileType] = useState({
+        balance: 0,
+        text: 'Total Assets'
+    });
     const [profileData, setProfileData] = useState({
         fiat: {
             balance: 0,
@@ -46,8 +52,8 @@ export default function Assets() {
             try {
                 const data = await profile(token);
                 setUser(data);
-                setAccountType({
-                    balance: data.balance,
+                setProfileType({
+                    balance: data.balances.total,
                     text: "Total Assets",
                 });
             } catch (error) { console.error('Error fetching data:', error);
@@ -55,6 +61,30 @@ export default function Assets() {
         };
         fetchData();
     }, [token])
+
+    const handleSetProfileType = (type) => {
+        if(type === 'contracts'){
+            setProfileType({
+                balance: user.balances.contracts,
+                text: "Contract Balance"
+            });
+        } else if(type === 'fiat'){
+            setProfileType({
+                balance: user.balances.fiat,
+                text: "Fiat Balance"
+            });
+        } else if(type === 'options'){
+            setProfileType({
+                balance: user.balances.options,
+                text: "Options Balance"
+            });
+        } else{
+            setProfileType({
+                balance: user.balances.total,
+                text: "Total Balance"
+            });
+        }
+    }
 
     return (
         <TabLayout nav="assets">
@@ -79,8 +109,8 @@ export default function Assets() {
                     <img className="profile__notification" src={notification} />
                 </div>
                 <div className="profile__info">
-                    <h3>Total Assets</h3>
-                    <h1>{ user.balance }</h1>
+                    <h3>{ profileType.text }</h3>
+                    <h1>${ profileType.balance }</h1>
                     <span>
                         <img src={arrow_up} />
                         105 (%0.8)
@@ -88,24 +118,46 @@ export default function Assets() {
                 </div>
                 </div>
                 <div className="actions">
-                <div className="action">
-                    <Link to={"/deposit"}>
-                    <img src={deposit} />
-                    <span>Deposit</span>
-                    </Link>
+                    <div className="action">
+                        <Link to={"/deposit"}>
+                        <img src={deposit} />
+                        <span>Deposit</span>
+                        </Link>
+                    </div>
+                    <div className="action">
+                        <Link to={"/withdraw"}>
+                        <img src={deposit} />
+                        <span>Withdraw</span>
+                        </Link>
+                    </div>
+                    <div className="action">
+                        <Link to={"/transfer"}>
+                        <img src={transfer} />
+                        <span>Transfer</span>
+                        </Link>
+                    </div>
                 </div>
-                <div className="action">
-                    <Link to={"/withdraw"}>
-                    <img src={deposit} />
-                    <span>Withdraw</span>
-                    </Link>
-                </div>
-                <div className="action">
-                    <Link to={"/transfer"}>
-                    <img src={transfer} />
-                    <span>Transfer</span>
-                    </Link>
-                </div>
+                <div className="profile_links mb-0" style={{ marginBottom: "0px" }}>
+                    <ul>
+                        <li>
+                            <div className="flex" onClick={() => handleSetProfileType('fiat')}>
+                                <img src={transfer_alt} />
+                                <span>Fiat Account</span>
+                            </div>
+                        </li> 
+                        <li>
+                            <div className="flex" onClick={() => handleSetProfileType('contracts')}>
+                                <img src={contract} />
+                                <span>Contract Account</span>
+                            </div>
+                        </li> 
+                        <li>
+                            <div className="flex" onClick={() => handleSetProfileType('options')}>
+                                <img src={option} />
+                                <span>Option Account</span>
+                            </div>
+                        </li> 
+                    </ul>       
                 </div>
                 <Links />
             </motion.div>

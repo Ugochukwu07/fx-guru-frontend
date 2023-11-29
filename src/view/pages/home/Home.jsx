@@ -15,7 +15,7 @@ import support from '#/assets/icons/support.svg'
 import help from '#/assets/icons/help.svg'
 import savings from '#/assets/icons/savings.svg'
 import start_trading from '#/assets/start_trading.png'
-import { useContext, useEffect } from "react"
+import { useEffect } from "react"
 import Slider from "react-slick";
 
 import "slick-carousel/slick/slick.css";
