@@ -5,7 +5,7 @@ import TabLayout from '#/view/layout/TabLayout';
 
 import './trade.scss'
 
-import { ToastContainer, toast, Zoom } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import chart from '../../../assets/icons/mini-chart.svg'
@@ -27,7 +27,7 @@ export default function Trade(){
 
     const [errors, setErrors] = useState({});
     const [currency, setCurrency] = useState([]);
-    const [rate, setRate] = useState([]);
+    // const [rate, setRate] = useState([]);
     const [market, setMarket] = useState([
         1621, 0.2
     ]);
@@ -71,7 +71,7 @@ export default function Trade(){
             setPercent(rate)
 
             return {currency}
-        }).then(({currency, rate}) => {
+        }).then(({currency}) => {
             const coin = state.prices.prices.find(item => item.symbol === currency)
             console.log(coin, state, currency);
             setMarket([coin.price, coin.change])
@@ -98,7 +98,7 @@ export default function Trade(){
         const { rate, max, min } = data.plans.find(item => item.id === id)
         setPercent(rate)
         setAmount([max, min])
-        setRate(e.target.value)
+        // setRate(e.target.value)
         setForm((prev) => {
             return {
                 ...prev,
@@ -308,6 +308,11 @@ export default function Trade(){
                         <span onClick={() => setHistoryMode(false)} className={`${!historyMode && 'active'}`}>History Entrust</span>
                     </div>
                     <div className='history_body px-0'>
+                    {
+                        (tradeHistory.completed.length < 1 && tradeHistory.pending.length < 1) && (<div className='no_data text-center'>
+                            <img className="mx-auto" src={nodata} />
+                        </div>)
+                    }
                         <div>
                             {
                                 !historyMode && tradeHistory.completed.map((item, index) => {

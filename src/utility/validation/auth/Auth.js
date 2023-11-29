@@ -11,7 +11,7 @@ export const registerSchema = Yup.object().shape({
     .min(5, 'Username must be at least 5 characters'),
   password: Yup.string()
     .required('Password is required')
-    .min(6, 'Password must be at least 6 characters')
+    .min(5, 'Password must be at least 6 characters')
     .matches(
       /^(?=.*[A-Za-z])[A-Za-z\d@$!%*#?&]{6,}$/,
       'Password must contain at least one letter'

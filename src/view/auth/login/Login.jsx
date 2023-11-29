@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { motion } from "framer-motion"
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast, ToastContainer } from "react-toastify";
 import { loginSchema } from "#/utility/validation/auth/Auth";
@@ -16,15 +16,15 @@ export default function Login(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [errors, setErrors] = useState({});
-    const state = useSelector((state) => state);
+    const [errors, setErrors] = useState({})
     const [showPassword, setShowPassword] = useState(false);
-    console.log(state);
+    const [loading, setLoading] = useState(false);
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
     const handleLogin = async (values) => {
+        setLoading(true);
         dispatch(loginStart());
         setErrors({});
         try {
@@ -36,6 +36,7 @@ export default function Login(){
                 navigate('/assets')
 
             }else{
+                setLoading(false)
                 if(response.errors){
                     setErrors(response.errors);
                     dispatch(loginFailure(response.errors));
@@ -46,6 +47,7 @@ export default function Login(){
             // Redirect or show a success message
         } catch (error) {
             toast.error(error.message)
+            setLoading(false)
             dispatch(loginFailure(error.message));
         }
     };
@@ -115,7 +117,7 @@ export default function Login(){
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: .4 }}
                         >
-                            <button>{ state.login.loading ? 'LOGGING IN' : 'LOG IN'}</button>
+                            <button>{ loading ? 'LOGGING IN' : 'LOG IN'}</button>
                         </motion.div>
                     </Form>
                 </Formik>
