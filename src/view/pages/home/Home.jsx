@@ -79,8 +79,10 @@ function Home(){
                         </Link>
                     </div>
                     <div className='action'>
-                        <img src={help} />
-                        <span>Service</span>
+                        <Link to={'/services'}>
+                            <img src={help} />
+                            <span>Service</span>
+                        </Link>
                     </div>
                     <div className='action'>
                         <Link to={'/contact'}>

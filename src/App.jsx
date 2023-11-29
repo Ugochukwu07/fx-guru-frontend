@@ -15,6 +15,7 @@ import Trade from './view/pages/trade/Trade'
 import Contract from './view/pages/contract/Contract'
 import Active from './view/pages/active/Active'
 import Contact from './view/pages/contact/Contact'
+import Service from './view/pages/service/Service'
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
 
 
       <Route path="/contact" exact element={ <Contact /> } />
+      <Route path="/services" exact element={ <Service /> } />
 
       <Route path="/register" exact element={ <Register /> } />
       <Route path="/login" exact element={ <Login /> } />
