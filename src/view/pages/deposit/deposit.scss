@@ -1,7 +1,7 @@
 .deposit{
-    padding-bottom: 4rem;
+    // padding-bottom: 2rem;
     &_header{
-        padding: 2rem 1.5rem;
+        padding: 1.5rem;
         justify-content: space-between;
         align-content: center;
         &__nav{
@@ -22,25 +22,25 @@
 
     &_wallet{
         &__currency{
-            padding: 1rem 2rem;
+            padding: .3rem 2rem;
             display: flex;
             justify-content: space-between;
             label{
                 font-weight: 500;
-                font-size: 15px;
+                font-size: 13px;
             }
             p{
-                font-size: 13px;
+                font-size: 12px;
                 color: rgba(34, 64, 196, 1);
                 font-weight: 400;
                 img{
-                    width: 15px;
+                    width: 14px;
                     display: inline;
                 }
             }
         }
         &__address{
-            padding: .5rem 2rem;
+            padding: .4rem 2rem;
             text-align: center;
             &_addresses{
                 display: flex;
@@ -51,7 +51,7 @@
                     border: 1px solid rgba(34, 64, 196, 1);
                     color: rgba(164, 175, 206, 1);
                     font-weight: 500;
-                    padding: 4px 15px;
+                    padding: 4px 10px;
                     font-size: 13px;
                     margin: 5px 4px;
                     flex: 1;
@@ -62,7 +62,7 @@
                 }
             }
             img, canvas{
-                width: 70%;
+                width: 60%;
                 margin: 20px auto;
                 margin-bottom: 1rem;
             }
@@ -73,7 +73,7 @@
             }
             .copy{
                 display: block;
-                font-size: 13px;
+                font-size: 12px;
                 font-weight: 600;
                 color: rgba(34, 64, 196, 1);
             }
@@ -81,14 +81,14 @@
     }
 
     &_form{
-        padding: 1rem 2rem;
+        padding: .5rem 2rem;
     }
 }
 
 .currency{
     position: absolute;
     top: 20%;
-    min-height: 200px;
+    min-height: 250px;
     height: auto;
     width: 80%;
     left: 50%;
@@ -121,10 +121,17 @@
         ul{
             li{
                 font-weight: 500;
-                font-size: 12px;
-                padding: 10px 15px;
+                font-size: 15px;
+                padding: 5px 10px;
                 color: rgba(0, 0, 0, 1);
                 border-bottom: 1px solid rgba(164, 175, 206, 0.7);
+                cursor: pointer;
+                &:last-child{
+                    border-bottom: none;
+                }
+                &:hover{
+                    background-color: rgba(34, 64, 196, 0.1);
+                }
             }
         }
     }

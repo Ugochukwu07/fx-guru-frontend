@@ -40,7 +40,7 @@ function Home(){
     return (
         <TabLayout nav={"home"}>
             <motion.div
-                className='home'
+                className='home mb-32'
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
             >

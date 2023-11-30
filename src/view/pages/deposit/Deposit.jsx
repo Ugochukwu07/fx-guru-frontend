@@ -122,15 +122,16 @@ function Deposit(){
         ));
     };
 
-    const handleSavePaymentProof = () => {
+    const handleSavePaymentProof = async () => {
         setLoading(true)
-        setForm((prevForm) => ({
-            ...prevForm,
-            currency_id: currentWallet[currentNetwork].id
-        }));
+        // setForm((prevForm) => ({
+        //     ...prevForm,
+        //     currency_id: currentWallet[currentNetwork].id
+        // }));
+        // console.log(currentWallet[currentNetwork].id);
         try{
             setErrors({});
-            saveProve(token, form).then(response => {
+            saveProve(token, {...form, currency_id: currentWallet[currentNetwork].id}).then(response => {
                 if(response.success){
                     toast.success(response.message);
                     setErrors({});
@@ -138,6 +139,9 @@ function Deposit(){
                 }else{
                     setLoading(false)
                     setErrors(response.errors);
+                    if(response.errors.currency_id != undefined){
+                        toast.error(response.errors.currency_id[0]);
+                    }
                 }
             })
             

@@ -21,7 +21,6 @@ body{
 
 #root{
   margin: auto;
-  min-height: 100%;
   // padding: 0px 10px;
   background-color: #FFFFFF;
   @include responsive(sm){

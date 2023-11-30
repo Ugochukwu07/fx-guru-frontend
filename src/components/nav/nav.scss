@@ -1,8 +1,9 @@
 .nav{
-    position: sticky;
-    width: 100%;
+    position: fixed;
     bottom: 0;
-    background-color: #fff;
+    width: 100%;
+    z-index: 999;
+    background-color: #ffffff;
     border-top: 1px solid rgba(0, 0, 0, 0.25);
     &__item{
         flex: 1;
