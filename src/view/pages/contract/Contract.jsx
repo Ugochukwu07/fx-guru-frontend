@@ -105,8 +105,8 @@ export default function Contract(){
             <div className='exchange contracts trade'>
                 <div className='exchange_title'>
                     <div className='box'>
-                        <span className='active'>Contracts</span>
-                        <Link to={'/trade'}><span> <img src={swap} /> Options</span></Link>
+                        <span className='active'>Options</span>
+                        <Link to={'/trade'}><span> <img src={swap} /> Contracts</span></Link>
                     </div>
                     <div className='exchange_title__quote'>
                         <span>BTC/USDT <img src={chart} /></span>

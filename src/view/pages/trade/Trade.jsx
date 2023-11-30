@@ -155,11 +155,11 @@ export default function Trade(){
             <div className='exchange trade'>
                 <div className='exchange_title'>
                     <div className='box'>
-                        <span className='active'>Options</span>
-                        <Link to={'/contracts'}><span> <img src={swap} /> Contracts</span></Link>
+                        <span className='active'>Contracts</span>
+                        <Link to={'/contracts'}><span> <img src={swap} /> Options</span></Link>
                     </div>
                     <div className='exchange_title__quote'>
-                        <span>{currency}/USDT <img src={chart} /></span>
+                        <span>BTC/USDT <img src={chart} /></span>
                     </div>
                 </div>
                 <div className="flex exchange_body">
@@ -222,12 +222,13 @@ export default function Trade(){
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ duration: .1 }}
                                             >
-                                                <label>Price</label>
+                                                <label>Amount</label>
                                                 <input
                                                     type="number" 
                                                     id="price" 
+                                                    step={0.000001}
                                                     name="price" 
-                                                    placeholder="Price"
+                                                    placeholder="0.001"
                                                     min={amount[1]}
                                                     max={amount[0]}
                                                     required
@@ -290,7 +291,7 @@ export default function Trade(){
                                     transition={{ duration: .5 }}
                                 >
                                     <button type='button' className={`btn ${tradeMode ? 'btn-up' : 'btn-down'} text-white btn-buy`} onClick={handleSubmit} >
-                                        {tradeMode ? `${currency} UP` : `DOWN ${currency}`}
+                                        {tradeMode ? `BTC UP` : `DOWN BTC`}
                                     </button>
                                 </motion.div>
                             </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from "framer-motion"
 import TabLayout from '#/view/layout/TabLayout'
@@ -12,6 +12,7 @@ import back from '#/assets/icons/back.svg'
 import {accounts} from '#/data/currency'
 import LoadingSpinner from '#/view/layout/Loading'
 import { saveTransfer } from '#/service/UserService'
+import { getOptionsBalance } from '../../../service/UserService'
 
 export default function Transfer(){
     const navigate = useNavigate();
@@ -19,11 +20,21 @@ export default function Transfer(){
     const { token } = useSelector((state) => state.login);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [currencies, setCurrencies] = useState([]);
     const [form, setForm] = useState({
+        currency: "",
         from_account: "",
         to_account: "",
         amount: 0,
     });
+
+    useEffect(() => {
+        document.title = 'Transfer | BitPay'
+        getOptionsBalance(token).then(data => {
+            setCurrencies(data.currencies)
+            return data
+        })
+    }, [])
 
     const goBack = () => {
         navigate(-1);
@@ -83,6 +94,33 @@ export default function Transfer(){
                     <LoadingSpinner />
                     ) : (
                         <div className="transfer_form">
+                            
+                            <motion.div 
+                                className='input_group'
+                                initial={{ opacity: 0, y: -100 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: .1 }}
+                            >
+                                <label>Currency</label>
+                                <select onChange={handleChange} name='currency'>
+                                {
+                                    currencies.map((value, index) => (
+                                        <option value={value.id} key={index}>
+                                            {value.symbol}
+                                        </option>
+                                    ))
+                                }
+                                </select>
+                                {errors.from_account && (
+                                    <motion.span initial={{ opacity: 0, y: -100 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: .3 }}
+                                        className="error-message text-red-500 font-light"
+                                    >{errors.from_account[0]}</motion.span>
+                                )}
+                                {/* <input readOnly type='text' onClick={toggleFromPopUp} name='currency' value={form.from} />
+                                <span className='eye-icon' onClick={toggleFromPopUp}><img src={down_caret} /></span> */}
+                            </motion.div>
                             
                             <motion.div 
                                 className='input_group'
