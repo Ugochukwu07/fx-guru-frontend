@@ -6,12 +6,12 @@ import LoadingSpinner from "../../layout/Loading";
 import TabLayout from '#/view/layout/TabLayout';
 
 import './withdraw.scss'
-import { ToastContainer, toast, Zoom } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 import back from '#/assets/icons/back.svg'
 import fe_arrow_up from '#/assets/icons/fe_arrow-up.svg'
 import fe_arrow_left from '#/assets/icons/fe_arrow-left.svg'
-import { getCurrencies, profile, withdraw } from '../../../service/UserService';
+import { getCurrencies, withdraw } from '../../../service/UserService';
 import { useSelector } from 'react-redux';
 
 
@@ -36,20 +36,24 @@ export default function Withdraw(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await getCurrencies(token);
+                getCurrencies(token).then(data => {
 
-                const user = await profile(token);
+                // const user = await profile(token);
+                    setWallets(data);
+                    setCurrenciesList(setupWallet(data))
+                    setCurrentWallet(data[Object.keys(data)[0]])
+                }).then(() => {
+                    
+                })
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally{
                 setForm(prev => {
                     return {
                         ...prev,
-                        extractable: user.balances.fiat,
+                        extractable: currentWallet[currentNetwork]?.balances.fiat ?? 0,
                     }
                 })
-                setWallets(data);
-                setCurrenciesList(setupWallet(data))
-                setCurrentWallet(data[Object.keys(data)[0]])
-            } catch (error) {
-                console.error('Error fetching data:', error);
             }
         };
         fetchData();
@@ -79,6 +83,7 @@ export default function Withdraw(){
 
     
     const setupWallet = (walletsData) => {
+        console.log(walletsData);
         const currencies = Object.keys(walletsData);
         return currencies.map((key) => (
             <li 
@@ -133,6 +138,8 @@ export default function Withdraw(){
         }
     }
 
+    // console.log(currentWallet[currentNetwork]);
+
     return (
         <TabLayout nav="assets">
         <ToastContainer />
@@ -150,7 +157,7 @@ export default function Withdraw(){
                         <label>
                             Select Currency
                         </label>
-                        <p onClick={togglePopUp}><img src={fe_arrow_up} /> USDT</p>
+                        <p onClick={togglePopUp}><img src={fe_arrow_up} /> {currentWallet[currentNetwork]?.symbol}</p>
                     </div>
                     <div className='deposit_wallet__address'>
                         <div className='deposit_wallet__address_addresses'>

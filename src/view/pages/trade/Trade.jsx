@@ -1,9 +1,14 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import TabLayout from '#/view/layout/TabLayout';
+import LoadingSpinner from "../../layout/Loading";
+import Price from '../../../components/price/Price';
 
 import './trade.scss'
+import { getOptionsBalance, getTradeHistory, startTrade } from '../../../service/UserService';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,11 +16,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import chart from '../../../assets/icons/mini-chart.svg'
 import swap from '../../../assets/icons/ri_swap-fill.svg'
 import nodata from '../../../assets/icons/nodata.svg'
-import { useEffect, useState } from 'react';
-import Price from '../../../components/price/Price';
-import { getOptionsBalance, getTradeHistory, startTrade } from '../../../service/UserService';
-import { useSelector } from 'react-redux';
-import LoadingSpinner from "../../layout/Loading";
 
 export default function Trade(){
     const state = useSelector(state => state)

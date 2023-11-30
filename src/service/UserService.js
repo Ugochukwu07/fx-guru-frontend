@@ -126,3 +126,17 @@ export async function completeTrade(token, formData, id){
       throw error;
     }
 }
+
+export async function getTransactionHistory(token){
+  try{
+    const response = await request.get('/v1/user/transactions', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
