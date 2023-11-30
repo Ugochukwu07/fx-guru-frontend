@@ -112,3 +112,17 @@ export async function withdraw(token, formData){
     throw error;
   }
 }
+
+export async function completeTrade(token, formData, id){
+    try {
+      const response = await request.post(`/v1/trade/${id}/complete`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+}

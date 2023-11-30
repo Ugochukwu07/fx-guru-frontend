@@ -22,9 +22,9 @@ export default function Transfer(){
     const [errors, setErrors] = useState({});
     const [currencies, setCurrencies] = useState([]);
     const [form, setForm] = useState({
-        currency: "",
-        from_account: "",
-        to_account: "",
+        currency: 0,
+        from_account: 0,
+        to_account: 1,
         amount: 0,
     });
 
@@ -52,6 +52,7 @@ export default function Transfer(){
         try{
             setErrors({});
             setLoading(true)
+            console.log(form);
             saveTransfer(token, form).then(response => {
                 if(response.success){
                     setLoading(false)
@@ -62,11 +63,19 @@ export default function Transfer(){
                         from_account: "",
                         to_account: "",
                         amount: 0,
+                        currency: ""
                     }));
                 }else{
                     setLoading(false)
                     toast.error(response.message);
                     (response.status == 401) && setErrors(response.errors);
+                }
+                return response.success
+            }).then(success => {
+                if(success){
+                    setTimeout(() => {
+                        navigate('/assets')
+                    }, 2400)
                 }
             })
         } catch(err){
@@ -103,20 +112,21 @@ export default function Transfer(){
                             >
                                 <label>Currency</label>
                                 <select onChange={handleChange} name='currency'>
+                                    <option>Select Currency</option>
                                 {
                                     currencies.map((value, index) => (
-                                        <option value={value.id} key={index}>
+                                        <option selected={form.currency == value.id} value={value.id} key={index}>
                                             {value.symbol}
                                         </option>
                                     ))
                                 }
                                 </select>
-                                {errors.from_account && (
+                                {errors.currency && (
                                     <motion.span initial={{ opacity: 0, y: -100 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: .3 }}
                                         className="error-message text-red-500 font-light"
-                                    >{errors.from_account[0]}</motion.span>
+                                    >{errors.currency[0]}</motion.span>
                                 )}
                                 {/* <input readOnly type='text' onClick={toggleFromPopUp} name='currency' value={form.from} />
                                 <span className='eye-icon' onClick={toggleFromPopUp}><img src={down_caret} /></span> */}
