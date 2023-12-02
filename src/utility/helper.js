@@ -49,9 +49,23 @@ export function generateNumber(num, rate){
     return { number: generatedNumber, rate: roundedRate , isPositive: isPositive};
 }
 
-export function currentProfit(rate, amount, time, timeRemaining){
-    if(timeRemaining == 0) timeRemaining = time
-    const profit = ((rate/100) * amount * time)/timeRemaining;
-    return Number(profit.toFixed(3));
+export function currentProfit(rate, amount, time, timeRemaining) {
+    // Check for invalid input values
+    if (isNaN(rate) || isNaN(amount) || isNaN(time) || isNaN(timeRemaining)) {
+        throw new Error('Invalid input values. Please provide valid numbers.');
+    }
+
+    // Ensure timeRemaining is not 0 to avoid division by zero
+    if (timeRemaining === 0) {
+        timeRemaining = time;
+    }
+
+    const profit = (((rate / 100) * amount * time) + amount) / timeRemaining;
+    
+    // Ensure the result is a number with 3 decimal places
+    const roundedProfit = Number(profit.toFixed(3));
+
+    return roundedProfit;
 }
+
   
