@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import chart from '../../../assets/icons/mini-chart.svg'
 import swap from '../../../assets/icons/ri_swap-fill.svg'
 import nodata from '../../../assets/icons/nodata.svg'
+import CountdownTimer from "../../../components/CountdownTimer";
 
 export default function Trade(){
     const state = useSelector(state => state)
@@ -364,7 +365,7 @@ export default function Trade(){
                                                     <span>Current Price</span>
                                                     <span className='up price'>{item.price ?? 0}</span>
                                                     <span>Count down</span>
-                                                    <span className='price'>{ clearInterval(() => setInterval(() => {})) }</span>
+                                                    <span className='price'><CountdownTimer seconds={item.time_remaining} /></span>
                                                 </div>
                                             </div>
                                             <hr />
@@ -404,13 +405,13 @@ export default function Trade(){
                                                     <span>Amount</span>
                                                     <span className='price'>{ item.amount}</span>
                                                     <span>P/L[{ item.crypto.symbol }]</span>
-                                                    <span className='up active price'>{item.profit}</span>
+                                                    <span className='up active price'>+{item.profit}</span>
                                                 </div>
                                                 <div className='current text-right'>
                                                     <span>Current Price</span>
                                                     <span className='up price'>{item.price ?? 0}</span>
                                                     <span>Count down</span>
-                                                    <span className='price'>{ clearInterval(() => intervalId(item.time_remaining)) }</span>
+                                                    <span className='price'><CountdownTimer seconds={item.time_remaining} /></span>
                                                 </div>
                                             </div>
                                             <hr />
