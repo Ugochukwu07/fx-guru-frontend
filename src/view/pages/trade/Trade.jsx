@@ -117,7 +117,7 @@ export default function Trade(){
             setLoading(false)
             return;
         }
-        startTrade(token, {...form, price: market.price}).then(response => {
+        startTrade(token, {...form, price: Number(market.price)}).then(response => {
             setLoading(false)
             if(response.success){
                 toast.success(response.message);
@@ -349,15 +349,15 @@ export default function Trade(){
                                             </div>
                                             <div className='order_body grid grid-cols-3'>
                                                 <div className='information'>
-                                                    <span className='quote'>{ item.crypto.symbol }/USDT</span>
-                                                    <span className='price'>{ item.profit + item.amount }</span>
+                                                    <span className='quote'>BTC/{ item.crypto.symbol }</span>
+                                                    <span className='price'>{item.price ?? 0}</span>
                                                     <span>C2c. timer</span>
                                                     <span className='price'>{ item.plan_id.name }</span>
                                                 </div>
                                                 <div className='numbers text-center'>
                                                     <span>Amount</span>
                                                     <span className='price'>{ item.amount}</span>
-                                                    <span>P/L[USDT]</span>
+                                                    <span>P/L[{ item.crypto.symbol }]</span>
                                                     <span className='up active price'>+{item.profit}</span>
                                                 </div>
                                                 <div className='current text-right'>
@@ -390,20 +390,20 @@ export default function Trade(){
                                                 }
                                             } key={index} className='order my-8'>
                                             <div className='order_title'>
-                                                <span className='up'>{ item.direction ? 'LONG' : 'SHORT'}</span>
+                                                <span className={ item.direction ? 'up active' : 'down active' }>{ item.direction ? 'UP' : 'DOWN'}</span>
                                                 <span>{item.created_at}</span>
                                             </div>
                                             <div className='order_body grid grid-cols-3'>
                                                 <div className='information'>
-                                                    <span className='quote'>{ item.crypto.symbol }/USDT</span>
-                                                    <span className='price'>{ item.profit + item.amount }</span>
+                                                    <span className='quote'>BTC/{ item.crypto.symbol }</span>
+                                                    <span className='price'>{item.price ?? 0}</span>
                                                     <span>C2c. timer</span>
                                                     <span className='price'>{ item.plan_id.name }</span>
                                                 </div>
                                                 <div className='numbers text-center'>
                                                     <span>Amount</span>
                                                     <span className='price'>{ item.amount}</span>
-                                                    <span>P/L[USDT]</span>
+                                                    <span>P/L[{ item.crypto.symbol }]</span>
                                                     <span className='up active price'>{item.profit}</span>
                                                 </div>
                                                 <div className='current text-right'>
