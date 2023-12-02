@@ -113,9 +113,9 @@ export async function withdraw(token, formData){
   }
 }
 
-export async function completeTrade(token, formData, id){
+export async function completeTrade(token, id){
     try {
-      const response = await request.post(`/v1/trade/${id}/complete`, formData, {
+      const response = await request.get(`/v1/trade/${id}/complete`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`

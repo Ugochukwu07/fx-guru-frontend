@@ -203,6 +203,7 @@ export default function Trade(){
                                                     required
                                                     // value={currency}
                                                 >
+                                                    <option></option>
                                                     {
                                                         data.currencies.map((value, index) => (
                                                             <option value={value.id} key={index}>
@@ -258,6 +259,7 @@ export default function Trade(){
                                                     onChange={handleRateChange}
                                                     required
                                                 >
+                                                    <option></option>
                                                     {
                                                         data.plans.map((value, index) => (
                                                             <option value={value.id} key={index}>
@@ -320,7 +322,7 @@ export default function Trade(){
                                     return (
                                         <div onClick={
                                             (item) => {
-                                                navigate2('/active', {
+                                                navigate('/active', {
                                                     state: {
                                                         direction: item.direction,
                                                         amount: item.amount,
