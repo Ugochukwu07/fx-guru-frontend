@@ -73,8 +73,14 @@ export default function Trade(){
             return {currency}
         }).then(({currency}) => {
             const coin = state.prices.prices.find(item => item.symbol === currency)
-            console.log(coin, state, currency);
-            setMarket([coin.price, coin.change])
+            if(!coin) return;
+            setMarket(() => {
+                return [
+                    coin.price, 
+                    coin.change
+                ]
+            }
+            )
         })
 
         getTradeHistory(token).then(data => {
@@ -322,14 +328,15 @@ export default function Trade(){
                                     return (
                                         <div onClick={
                                             (item) => {
-                                                navigate('/active', {
-                                                    state: {
+                                                const data = {
                                                         direction: item.direction,
                                                         amount: item.amount,
                                                         time: item.time_remaining,
                                                         currency: currency,
                                                         trade: item
                                                     }
+                                                navigate('/active', {
+                                                    state: {data}
                                                 })
                                             }
                                         } key={index} className='order my-8'>
@@ -367,15 +374,16 @@ export default function Trade(){
                                     return (
                                         <div onClick={
                                                 (item) => {
-                                                    navigate3('/active', {
-                                                        state: {
-                                                            direction: item.direction,
-                                                            amount: item.amount,
-                                                            time: item.time_remaining,
-                                                            currency: currency,
-                                                            trade: item
-                                                        }
-                                                    })
+                                                    const data = {
+                                                        direction: item.direction,
+                                                        amount: item.amount,
+                                                        time: item.time_remaining,
+                                                        currency: currency,
+                                                        trade: item
+                                                    }
+                                                navigate('/active', {
+                                                    state: {data}
+                                                })
                                                 }
                                             } key={index} className='order my-8'>
                                             <div className='order_title'>
