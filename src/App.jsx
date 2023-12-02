@@ -40,6 +40,7 @@ function App() {
       <Route path="/register" exact element={ <Register /> } />
       <Route path="/login" exact element={ <Login /> } />
       <Route path="/forget" exact element={ <Forget /> } />
+      <Route path="*" element={ <Home /> } />
     </Routes>
   )
 }

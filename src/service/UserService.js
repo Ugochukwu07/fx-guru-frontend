@@ -140,3 +140,17 @@ export async function getTransactionHistory(token){
     throw error;
   }
 }
+
+export async function getTradeInfo(token, id){
+  try{
+    const response = await request.get(`/v1/trade/${id}/info`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+}

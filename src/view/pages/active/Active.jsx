@@ -3,23 +3,30 @@ import { useSelector } from 'react-redux';
 
 import './active.scss'
 
-import eth from '../../../assets/icons/ETH.svg'
 import { useEffect, useState } from 'react';
-import { completeTrade } from '../../../service/UserService';
+import { completeTrade, getTradeInfo } from '../../../service/UserService';
 import { currentProfit, generateNumber } from '../../../utility/helper';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Active(){
     const {token} = useSelector(state => state.login)
     const {state} = useLocation()
-    const {currency, trade } = state
+    const {currency, trade, market } = state
     const navigate = useNavigate()
 
     const [angle, setAngle] = useState(0)
     const [timeRemaining, setTimeRemaining] = useState(trade.plan_id.time)
 
     useEffect(() => {
+        getTradeInfo(token, trade.id).then(res => {
+            setTimeRemaining(res.time_remaining)
+            setAngle(res.degree)
+        })
         const intervalID = setInterval(() => {
-            setAngle(prev => (prev + 1) % 360);
+            const clampedCurrentTime = Math.min((trade.plan_id.time - timeRemaining), trade.plan_id.time);
+            const calculatedDegree = (clampedCurrentTime / trade.plan_id.time) * 360;
+            setAngle(calculatedDegree);
+            console.log(calculatedDegree);
         }, 1000)
         return clearInterval(intervalID)
     }, [])
@@ -27,6 +34,13 @@ export default function Active(){
     useEffect(() => {
         const intervalId = setInterval(() => {
             if(timeRemaining < 1){
+                completeTrade(token, trade.id).then(() => {
+                    toast.success('Trading Completed')
+                    setAngle(0)
+                    setTimeout(() => {
+                        navigate('/assets')
+                    }, 2500)
+                })
                 return clearInterval(intervalId);
             }
           setTimeRemaining((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
@@ -35,19 +49,17 @@ export default function Active(){
     }, []);
 
     if(timeRemaining < 1){
-        completeTrade(token, trade.id).then(res => {
-            console.log(res)
-            setAngle(0)
-            navigate('/asset')
+        completeTrade(token, trade.id).then(() => {
+            toast.success('Trading Completed')
         })
     }
-    console.log(angle, timeRemaining);
 
-    const {number, rate, isPositive} = generateNumber(16960.6700, 0.1);
-    const profit = currentProfit(trade.plan_id.rate, number, trade.plan_id.time, timeRemaining)
+    const {number, rate, isPositive} = generateNumber(Number(market.price), Number(market.rate));
+    const profit = currentProfit(trade.plan_id.rate, state.amount, trade.plan_id.time, timeRemaining)
     
     return (
         <div className='active_page text-center p-8 px-16'>
+            <ToastContainer />
             <div className='active_page_title'>
                 <span>
                     {/* <img src={eth} /> */}
@@ -68,15 +80,27 @@ export default function Active(){
                 </div>
                 <div className='grid info text-left grid-cols-2'>
                     <span>Direction</span>
-                    <span className={ state.direction ? 'up' : 'down'}>{state.direction ? 'UP' : 'DOWN'}</span>
+                    <span className={ state.direction ? 'up active' : 'down active'}>{state.direction ? 'UP' : 'DOWN'}</span>
                     <span>Amount</span>
-                    <span>{state.amount}</span>
+                    <span>${state.amount}</span>
                     <span>Purchase price</span>
-                    <span>16960.0201</span>
+                    <span>{Number(market.price).toFixed(4)}</span>
                     <span>Profit and Loss</span>
                     <span className={isPositive ? 'up active' : 'down active'}>+{profit}</span>
                 </div>
                 <Link to='/trade'><button>Back</button></Link>
+                <br />
+                {
+                    timeRemaining == 0 && <button className='mt-3' onClick={() => {
+                        completeTrade(token, trade.id).then(() => {
+                            toast.warning('Saving Trade...')
+                            setAngle(0)
+                            setTimeout(() => {
+                                navigate('/assets')
+                            }, 2000)
+                        })
+                    }}> Complete Trade </button>
+                }
             </div>
         </div>
     )

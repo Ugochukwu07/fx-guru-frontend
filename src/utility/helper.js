@@ -9,7 +9,7 @@ export function generateNumbers(num, rate) {
 
         generatedNumber = Number(generatedNumber.toFixed(3));
 
-        const roundedRate = Math.round(randomRate * 100000) / 100000;
+        const roundedRate = Math.round(Math.abs(randomRate) * 100000) / 100000;
 
         if (generatedNumber > num) {
             if(result.above.length < 4){
@@ -51,7 +51,7 @@ export function generateNumber(num, rate){
 
 export function currentProfit(rate, amount, time, timeRemaining){
     if(timeRemaining == 0) timeRemaining = time
-    const profit = ((rate/100) * amount * timeRemaining)/time;
+    const profit = ((rate/100) * amount * time)/timeRemaining;
     return Number(profit.toFixed(3));
 }
   

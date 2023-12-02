@@ -20,17 +20,17 @@ import nodata from '../../../assets/icons/nodata.svg'
 export default function Trade(){
     const state = useSelector(state => state)
     const {token} = state.login
+    const prices = [...state.prices.prices]
 
     const navigate = useNavigate();
-    const navigate2 = useNavigate();
-    const navigate3 = useNavigate();
 
     const [errors, setErrors] = useState({});
     const [currency, setCurrency] = useState([]);
     // const [rate, setRate] = useState([]);
-    const [market, setMarket] = useState([
-        1621, 0.2
-    ]);
+    const [market, setMarket] = useState({
+        price: prices.find(item => item.symbol === 'BTC').price, 
+        rate: prices.find(item => item.symbol === 'BTC').change
+    });
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         balance: 0,
@@ -71,22 +71,18 @@ export default function Trade(){
             setPercent(rate)
 
             return {currency}
-        }).then(({currency}) => {
-            const coin = state.prices.prices.find(item => item.symbol === currency)
-            if(!coin) return;
-            setMarket(() => {
-                return [
-                    coin.price, 
-                    coin.change
-                ]
-            }
-            )
         })
 
         getTradeHistory(token).then(data => {
             setTradeHistory(data)
         });
+
+        const coin = state.prices.prices.find(item => item.symbol === 'BTC')
+        if(coin){
+            setMarket({price: coin.price,  rate: coin.change })
+        }
     }, [])
+            
 
     const handleModeChange = (e) => {
         const {symbol, id} = data.currencies.find(item => item.id == e.target.value)
@@ -121,9 +117,8 @@ export default function Trade(){
             setLoading(false)
             return;
         }
-        startTrade(token, form).then(response => {
+        startTrade(token, {...form, price: market.price}).then(response => {
             setLoading(false)
-            console.log(response.status);
             if(response.success){
                 toast.success(response.message);
                 setErrors({});
@@ -133,7 +128,6 @@ export default function Trade(){
             }
             return response
         }).then(response => {
-            console.log(response.data);
             if(response.success){
                 setTimeout(() => {
                     navigate('/active', {
@@ -142,7 +136,8 @@ export default function Trade(){
                             amount: form.amount,
                             time: form.time,
                             currency: currency,
-                            trade: response.data
+                            trade: response.data,
+                            market: market
                         }
                     });
                 }, 2500);
@@ -308,7 +303,7 @@ export default function Trade(){
                         <div className='title'>
                             <h2 className='up'>{data.balance} <span>USDT</span></h2>
                         </div>
-                        <Price data={{ price: market[0], rate: market[1] }} />
+                        <Price data={{ price: market.price, rate: market.rate }} />
                     </div>
                 </div>
                 <div className='w-full history'>
