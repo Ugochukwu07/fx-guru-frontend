@@ -148,7 +148,15 @@ export default function Trade(){
         })
     }
 
-    const intervalId = setInterval((time) => (time > 0 ? time - 1 : 0), 1000);
+//     const intervalId = (time) => {
+//         setInterval((time) => {
+//             if(time == 0){
+//                 clearInterval(intervalId(0))
+//                 return time;
+//             }
+//             return time > 0 ? time - 1 : 0
+//         }, 1000);
+// }
 
     return (
         <TabLayout nav={'trade'}>
@@ -309,7 +317,7 @@ export default function Trade(){
                 <div className='w-full history'>
                     <div className='history_tabs'>
                         <span onClick={() => setHistoryMode(true)} className={historyMode && 'active'}>Current Entrust</span>
-                        <span onClick={() => setHistoryMode(false)} className={`${!historyMode && 'active'}`}>History Entrust</span>
+                        <span onClick={() => setHistoryMode(false)} className={`${!historyMode && 'active'}`}>Closed</span>
                     </div>
                     <div className='history_body px-0'>
                     {
@@ -336,13 +344,13 @@ export default function Trade(){
                                             }
                                         } key={index} className='order my-8'>
                                             <div className='order_title'>
-                                                <span className='up'>{ item.direction ? 'LONG' : 'SHORT'}</span>
+                                                <span className='up active'>{ item.direction ? 'UP' : 'DOWN'}</span>
                                                 <span>{item.created_at}</span>
                                             </div>
                                             <div className='order_body grid grid-cols-3'>
                                                 <div className='information'>
                                                     <span className='quote'>{ item.crypto.symbol }/USDT</span>
-                                                    <span className='price'>{ item.price }</span>
+                                                    <span className='price'>{ item.profit + item.amount }</span>
                                                     <span>C2c. timer</span>
                                                     <span className='price'>{ item.plan_id.name }</span>
                                                 </div>
@@ -350,13 +358,13 @@ export default function Trade(){
                                                     <span>Amount</span>
                                                     <span className='price'>{ item.amount}</span>
                                                     <span>P/L[USDT]</span>
-                                                    <span className='up price'>0.0000</span>
+                                                    <span className='up active price'>+{item.profit}</span>
                                                 </div>
                                                 <div className='current text-right'>
                                                     <span>Current Price</span>
-                                                    <span className='up price'>16969.14</span>
+                                                    <span className='up price'>{item.price ?? 0}</span>
                                                     <span>Count down</span>
-                                                    <span className='price'>{ clearInterval(() => intervalId(item.time_remaining)) }</span>
+                                                    <span className='price'>{ clearInterval(() => setInterval(() => {})) }</span>
                                                 </div>
                                             </div>
                                             <hr />
@@ -388,7 +396,7 @@ export default function Trade(){
                                             <div className='order_body grid grid-cols-3'>
                                                 <div className='information'>
                                                     <span className='quote'>{ item.crypto.symbol }/USDT</span>
-                                                    <span className='price'>{ item.price }</span>
+                                                    <span className='price'>{ item.profit + item.amount }</span>
                                                     <span>C2c. timer</span>
                                                     <span className='price'>{ item.plan_id.name }</span>
                                                 </div>
@@ -396,11 +404,11 @@ export default function Trade(){
                                                     <span>Amount</span>
                                                     <span className='price'>{ item.amount}</span>
                                                     <span>P/L[USDT]</span>
-                                                    <span className='up price'>0.0000</span>
+                                                    <span className='up active price'>{item.profit}</span>
                                                 </div>
                                                 <div className='current text-right'>
                                                     <span>Current Price</span>
-                                                    <span className='up price'>16969.14</span>
+                                                    <span className='up price'>{item.price ?? 0}</span>
                                                     <span>Count down</span>
                                                     <span className='price'>{ clearInterval(() => intervalId(item.time_remaining)) }</span>
                                                 </div>

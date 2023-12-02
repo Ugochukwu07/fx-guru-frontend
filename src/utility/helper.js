@@ -49,23 +49,52 @@ export function generateNumber(num, rate){
     return { number: generatedNumber, rate: roundedRate , isPositive: isPositive};
 }
 
+
 export function currentProfit(rate, amount, time, timeRemaining) {
     // Check for invalid input values
     if (isNaN(rate) || isNaN(amount) || isNaN(time) || isNaN(timeRemaining)) {
         throw new Error('Invalid input values. Please provide valid numbers.');
     }
 
+    // Get the current time in milliseconds
+    const currentTime = new Date()
+    const current_time = currentTime.getTime();
+    const new_time = new Date().setSeconds(currentTime.getSeconds() + time);
+
+    // console.log(currentTime, new_time);
+    // Calculate the elapsed time in seconds
+    const elapsedTimeInSeconds = (new_time - current_time) / 1000;
+
     // Ensure timeRemaining is not 0 to avoid division by zero
     if (timeRemaining === 0) {
-        timeRemaining = time;
+        timeRemaining = elapsedTimeInSeconds;
     }
-
-    const profit = (((rate / 100) * amount * time) + amount) / timeRemaining;
+    // console.log(elapsedTimeInSeconds, timeRemaining);
+    const profit = ((rate / 100) * amount * elapsedTimeInSeconds) / timeRemaining;
     
     // Ensure the result is a number with 3 decimal places
     const roundedProfit = Number(profit.toFixed(3));
 
     return roundedProfit;
 }
+
+// export function currentProfit(rate, amount, time, timeRemaining) {
+//     // Check for invalid input values
+//     if (isNaN(rate) || isNaN(amount) || isNaN(time) || isNaN(timeRemaining)) {
+//         throw new Error('Invalid input values. Please provide valid numbers.');
+//     }
+
+//     // Ensure timeRemaining is not 0 to avoid division by zero
+//     if (timeRemaining === 0) {
+//         timeRemaining = time;
+//     }
+
+//     const profit = (((rate / 100) * amount * time) + amount) / timeRemaining;
+    
+//     // Ensure the result is a number with 3 decimal places
+//     const roundedProfit = Number(profit.toFixed(3));
+
+//     return roundedProfit;
+// }
 
   

@@ -25,7 +25,7 @@ export default function Active(){
         const intervalID = setInterval(() => {
             const clampedCurrentTime = Math.min((trade.plan_id.time - timeRemaining), trade.plan_id.time);
             const calculatedDegree = (clampedCurrentTime / trade.plan_id.time) * 360;
-            setAngle(calculatedDegree);
+            setAngle(prev => calculatedDegree-prev);
             console.log(calculatedDegree);
         }, 1000)
         return clearInterval(intervalID)
@@ -55,7 +55,7 @@ export default function Active(){
     }
 
     const {number, rate, isPositive} = generateNumber(Number(market.price), Number(market.rate));
-    const profit = currentProfit(trade.plan_id.rate, state.amount, trade.plan_id.time, timeRemaining)
+    const profit = currentProfit(trade.plan_id.rate, state.amount, trade.plan_id.time*1000, timeRemaining*1000)
     
     return (
         <div className='active_page text-center p-8 px-16'>
