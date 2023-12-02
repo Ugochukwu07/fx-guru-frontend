@@ -23,6 +23,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" exact element={ <Home /> } />
+      <Route path="/profile" exact element={ <Protected> <Assets /> </Protected> } />
       <Route path="/assets" exact element={ <Protected> <Assets /> </Protected> } />
       <Route path="/deposit" exact element={ <Protected> <Deposit /> </Protected> } />
       <Route path="/withdraw" exact element={ <Protected> <Withdraw /> </Protected> } />

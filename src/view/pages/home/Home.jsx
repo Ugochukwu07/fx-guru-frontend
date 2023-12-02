@@ -73,7 +73,7 @@ function Home(){
                         </Link>
                     </div>
                     <div className='action'>
-                        <Link to={'/assets'}>
+                        <Link to={'/profile'}>
                             <img src={savings} />
                             <span>Savings</span>
                         </Link>

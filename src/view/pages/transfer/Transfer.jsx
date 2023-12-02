@@ -74,7 +74,7 @@ export default function Transfer(){
             }).then(success => {
                 if(success){
                     setTimeout(() => {
-                        navigate('/assets')
+                        navigate('/profile')
                     }, 2400)
                 }
             })

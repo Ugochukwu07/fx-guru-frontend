@@ -30,7 +30,7 @@ export default function Nav(probs) {
     },
     {
       id: 3,
-      to: "/assets",
+      to: "/profile",
       text: "Assets",
       img: assets,
       img2: assetsalt,

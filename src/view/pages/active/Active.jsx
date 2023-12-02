@@ -38,7 +38,7 @@ export default function Active(){
                     toast.success('Trading Completed')
                     setAngle(0)
                     setTimeout(() => {
-                        navigate('/assets')
+                        navigate('/profile')
                     }, 2500)
                 })
                 return clearInterval(intervalId);
@@ -96,7 +96,7 @@ export default function Active(){
                             toast.warning('Saving Trade...')
                             setAngle(0)
                             setTimeout(() => {
-                                navigate('/assets')
+                                navigate('/profile')
                             }, 2000)
                         })
                     }}> Complete Trade </button>
