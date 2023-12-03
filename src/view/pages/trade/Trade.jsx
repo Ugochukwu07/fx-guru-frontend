@@ -52,6 +52,7 @@ export default function Trade(){
         completed: [],
         pending: []
     })
+    const [available, setAvailable] = useState(0)
 
     useEffect(() => {
         document.title = 'Trade | BitPay'
@@ -86,8 +87,9 @@ export default function Trade(){
             
 
     const handleModeChange = (e) => {
-        const {symbol, id} = data.currencies.find(item => item.id == e.target.value)
+        const {symbol, id, balance} = data.currencies.find(item => item.id == e.target.value)
         setCurrency(symbol)
+        setAvailable(balance)
         setForm((prev) => {
             return {
                 ...prev,
@@ -287,11 +289,11 @@ export default function Trade(){
                                             <div className='info'>
                                                 <div className='info_block flex justify-between'>
                                                     <span>Available</span>
-                                                    <span>{data.balance} {currency}</span>
+                                                    <span>{available} {currency}</span>
                                                 </div>
                                                 <div className='info_block flex justify-between'>
                                                     <span>Volume</span>
-                                                    <span>0 {currency}</span>
+                                                    <span>{((form.amount/available)*100).toFixed(3)}% {currency}</span>
                                                 </div>
                                             </div>
                                         </>
@@ -345,7 +347,7 @@ export default function Trade(){
                                             }
                                         } key={index} className='order my-8'>
                                             <div className='order_title'>
-                                                <span className='up active'>{ item.direction ? 'UP' : 'DOWN'}</span>
+                                                <span className={ item.direction ? 'up active' : 'down active' }>{ item.direction ? 'UP' : 'DOWN'}</span>
                                                 <span>{item.created_at}</span>
                                             </div>
                                             <div className='order_body grid grid-cols-3'>
