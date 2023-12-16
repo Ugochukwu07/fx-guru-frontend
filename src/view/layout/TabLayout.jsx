@@ -20,7 +20,6 @@ export default function TabLayout({children, nav}){
             transition={{ duration: 1 }}
             style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
         >
-
             <ScrollToTop />
             <div className='mb-16' style={{flex: 1, minHeight: '135vh' }}>
                 {children}

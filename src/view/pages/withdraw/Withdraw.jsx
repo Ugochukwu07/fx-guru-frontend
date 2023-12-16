@@ -62,7 +62,15 @@ export default function Withdraw(){
     networks = currentWallet.map((item, key) => (<span 
         key={key} 
         className={currentNetwork == key ? 'active' : ''}
-        onClick={() => setCurrentNetwork(key)}
+        onClick={() => {
+            setCurrentNetwork(key)
+            setForm(prev => {
+                return {
+                    ...prev,
+                    extractable: currentWallet[currentNetwork]?.balances.fiat ?? 0,
+                }
+            })
+        }}
     >{item.network}</span>))
   
     const handleChange = (e) => {
@@ -83,7 +91,6 @@ export default function Withdraw(){
 
     
     const setupWallet = (walletsData) => {
-        console.log(walletsData);
         const currencies = Object.keys(walletsData);
         return currencies.map((key) => (
             <li 
@@ -91,6 +98,12 @@ export default function Withdraw(){
                     () => {
                         setCurrentWallet(walletsData[key]);
                         setPopup(false)
+                        setForm(prev => {
+                            return {
+                                ...prev,
+                                extractable: walletsData[key][currentNetwork]?.balances.fiat ?? 0,
+                            }
+                        })
                     } 
                 }
                 key={key}
@@ -99,8 +112,6 @@ export default function Withdraw(){
             </li>
         ));
     };
-
-    // console.log(currentWallet[currentNetwork]);
 
     const [isZoomed, setZoomed] = useState(false);
 
@@ -137,8 +148,6 @@ export default function Withdraw(){
             console.error('Error fetching data:', err)
         }
     }
-
-    // console.log(currentWallet[currentNetwork]);
 
     return (
         <TabLayout nav="assets">

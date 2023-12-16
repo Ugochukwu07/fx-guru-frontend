@@ -40,6 +40,7 @@ export default function Login(){
                 if(response.errors){
                     setErrors(response.errors);
                     dispatch(loginFailure(response.errors));
+                    // toast.success(response.errors);
                 }else{
                     toast.error(response.message)
                 }
@@ -78,7 +79,7 @@ export default function Login(){
                             <label>User ID</label>
                             <Field placeholder="123456" type='number' name='user_id' />
                             <ErrorMessage name="user_id" component="span" className="error-message text-red-500 font-light" />
-                            {errors.name && (
+                            {errors.user_id && (
                                 <span className="error-message text-red-500 font-light">{errors.name[0]}</span>
                             )}
                         </motion.div>
