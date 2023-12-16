@@ -3,22 +3,25 @@
 .nav{
     position: fixed;
     bottom: 0;
-    // width: 50%;
+    // width: 100%;
     z-index: 999;
     background-color: #ffffff;
     border-top: 1px solid rgba(0, 0, 0, 0.25);
+    @include responsive(xs){
+        width: 100%;
+    };
     @include responsive(sm){
         width: 79.9%;
-      };
-      @include responsive(md){
-        width: 69.9%;
-      };
-      @include responsive(lg){
-        width: 59.9%;
-      };
-      @include responsive(xl){
-        width: 39.9%;
-      };
+    };
+    @include responsive(md){
+    width: 69.9%;
+    };
+    @include responsive(lg){
+    width: 59.9%;
+    };
+    @include responsive(xl){
+    width: 39.9%;
+    };
     &__item{
         flex: 1;
         padding: 10px;
