@@ -23,7 +23,11 @@ import arrow_up from "#/assets/icons/arrow-up.svg";
 export default function Assets() {
     const { token } = useSelector((state) => state.login);
     
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState({
+        email: 'info@bitpay.com',
+        user_id: 12345,
+
+    })
     const [loading, setLoading] = useState(true);
     const [profileType, setProfileType] = useState({
         balance: 0,
@@ -109,8 +113,8 @@ export default function Assets() {
                     <img className="profile__notification" src={notification} />
                 </div>
                 <div className="profile__info">
-                    <h3>{ profileType.text }</h3>
-                    <h1>${ profileType.balance }</h1>
+                    <h3>{ profileType.text ?? 'Total' }</h3>
+                    <h1>${ profileType.balance ?? 0 }</h1>
                     <span>
                         <img src={arrow_up} />
                         105 (%0.8)

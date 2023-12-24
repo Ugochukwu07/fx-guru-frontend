@@ -9,11 +9,11 @@ function Header(){
             <div className='logo'>
                 <img src={logo} />
             </div>
-                <div className='avatar'>
-            <Link to={'/'}>
+            <div className='avatar'>
+                <Link to={"/assets"}>
                     <img src={avatar} />
-            </Link>
-                </div>
+                </Link> 
+            </div>
         </div>
     )
 }

@@ -10,6 +10,8 @@
     .avatar{
         img{
             width: 30px;
+            pointer-events: visible;
+            margin: 5px;
         }
     }
 }
