@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { motion } from "framer-motion";
 
@@ -6,17 +7,84 @@ import {exchangeSchema} from '../../../utility/validation/exchange'
 
 import './exchange.scss'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import chart from '../../../assets/icons/mini-chart.svg'
 import caret_down from '../../../assets/icons/caret-down.svg'
 import nodata from '../../../assets/icons/nodata.svg'
-import { useState } from 'react';
 import Price from '../../../components/price/Price';
+import { getOptionsBalance } from '../../../service/UserService';
+import { useSelector } from 'react-redux';
 
 export default function Exchange(){
+    const state = useSelector(state => state)
+    const {token} = state.login
+    const prices = [...state.prices.prices]
+
     const [errors, setErrors] = useState({});
+    const [tradeMode, setTradeMode] = useState(true);
+    const [data, setData] = useState({
+        balance: 0,
+        currencies: [],
+        plans: [],
+    });
+    const [currency, setCurrency] = useState([]);
+    // const [rate, setRate] = useState([]);
+    const [market, setMarket] = useState({
+        price: prices.find(item => item.symbol === 'BTC').price, 
+        rate: prices.find(item => item.symbol === 'BTC').change
+    });
+    const [percent, setPercent] = useState(0);
+    const [available, setAvailable] = useState(0)
+    const [form, setForm] = useState({
+        action: true,
+        amount: 0,
+        time: 0,
+        rate: 0
+    })
+
+    useEffect(() => {
+        document.title = 'Exchange | BitPay'
+        getOptionsBalance(token).then(data => {
+            setData(prev => {
+                return {
+                    ...prev, 
+                    balance: data.balance,
+                    currencies: data.currencies,
+                    plans: data.plans
+                }
+            })
+            console.log(data);
+            return data
+        }).then(data => {
+            const {symbol} = data.currencies[0]
+            setCurrency(symbol)
+            const { rate } = data.plans[0]
+            setPercent(rate)
+
+            return {currency}
+        })
+
+        const coin = state.prices.prices.find(item => item.symbol === 'BTC')
+        if(coin){
+            setMarket({price: coin.price,  rate: coin.change })
+        }
+    }, [])
+
+    const handleModeChange = (e) => {
+        const {symbol, balance} = data.currencies.find(item => item.id == e.target.value)
+        setCurrency(symbol)
+        setAvailable(balance)
+    }
+
+    const handleSubmit = () => {
+        toast.info('Exchange is currently undergoing upgrades, Please try again later. Thank You.')
+    }
 
     return (
         <TabLayout nav={'exchange'}>
+        <ToastContainer />
             <div className='exchange'>
                 <div className='exchange_title'>
                     <h1>Exchange</h1>
@@ -26,9 +94,25 @@ export default function Exchange(){
                 </div>
                 <div className="flex exchange_body">
                     <div className="w-1/2 exchange_body__execute">
-                        <div className='title'>
-                            <span className='up active'>Buy</span>
-                            <span className='down'>Sell</span>
+                    <div className='title'>
+                            <span onClick={() => {
+                                setTradeMode(true)
+                                setForm(prev => {
+                                    return {
+                                        ...prev,
+                                        action: tradeMode
+                                    }
+                                })
+                            }} className={`up ${tradeMode && 'active'}`}>UP</span>
+                            <span onClick={() => {
+                                setTradeMode(false)
+                                setForm(prev => {
+                                    return {
+                                        ...prev,
+                                        action: tradeMode
+                                    }
+                                })
+                            }} className={`down ${!tradeMode && 'active'}`}>DOWN</span>
                         </div>
                         <div className="form">
                             <Formik
@@ -49,7 +133,21 @@ export default function Exchange(){
                                         transition={{ duration: .1 }}
                                     >
                                         <label>Transaction mode</label>
-                                        <Field type="text" id="name" name="name" />
+                                        <select
+                                            name="mode"
+                                            onChange={handleModeChange}
+                                            required
+                                            // value={currency}
+                                        >
+                                            <option></option>
+                                            {
+                                                data.currencies.map((value, index) => (
+                                                    <option value={value.id} key={index}>
+                                                        {value.symbol}
+                                                    </option>
+                                                ))
+                                            }
+                                        </select>
                                         <ErrorMessage name="name" component="span" className="error-message text-red-500 font-light" />
                                         {errors.name && (
                                             <span className="error-message text-red-500 font-light">{errors.name[0]}</span>
@@ -82,16 +180,16 @@ export default function Exchange(){
                                         {errors.number && (
                                             <span className="error-message text-red-500 font-light">{errors.number[0]}</span>
                                         )}
-                                        <span className='eye-icon'>BTC</span>
+                                        <span className='eye-icon'>{currency}</span>
                                     </motion.div>
                                     <div className='info'>
                                         <div className='info_block flex justify-between'>
                                             <span>Available</span>
-                                            <span>O.OO USDT</span>
+                                            <span>{available} {currency}</span>
                                         </div>
                                         <div className='info_block flex justify-between'>
                                             <span>Volume</span>
-                                            <span>O USDT</span>
+                                            <span>{((form.amount/available)*100).toFixed(3)}% {currency}</span>
                                         </div>
                                     </div>
                                     <motion.div className='btn-group'
@@ -99,9 +197,9 @@ export default function Exchange(){
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: .5 }}
                                     >
-                                        <button className='btn btn-up bg-green-700 text-white btn-buy' type="submit" >
-                                            BUY/BTC
-                                        </button>
+                                    <button type='button' className={`btn ${tradeMode ? 'btn-up' : 'btn-down'} text-white btn-buy`} onClick={handleSubmit} >
+                                        {tradeMode ? `BTC UP` : `DOWN BTC`}
+                                    </button>
                                     </motion.div>
                                 </Form>
                             </Formik>
@@ -109,9 +207,9 @@ export default function Exchange(){
                     </div>
                     <div className="w-1/2 exchange_body__price">
                         <div className='title'>
-                            <h2 className='up'>0.00 <span>USDT</span></h2>
+                            <h2 className='up'>{data.balance} <span>USDT</span></h2>
                         </div>
-                        <Price data={{ price: 1678, rate: 10 }} />
+                        <Price data={{ price: market.price, rate: market.rate }} />
                     </div>
                 </div>
                 <div className='w-full history'>
