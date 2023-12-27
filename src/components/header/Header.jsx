@@ -12,7 +12,7 @@ function Header(){
             <div className='avatar'>
                 <Link to={"/assets"}>
                     <img src={avatar} />
-                </Link> 
+                </Link>
             </div>
         </div>
     )

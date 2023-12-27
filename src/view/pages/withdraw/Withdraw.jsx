@@ -121,6 +121,7 @@ export default function Withdraw(){
 
     const handleWithdrawal = () => {
         setLoading(true)
+        window.scrollTo(0, 0);
         try{
             withdraw(token, {
                 amount: form.amount,
@@ -136,12 +137,13 @@ export default function Withdraw(){
                         address: "",
                         amount: 0,
                     })
+                    window.scrollTo(0, 0);
                 }else{
                     setLoading(false)
-                    setErrors(response.errors);
+                    if(response.errors) setErrors(response.errors);
+                    toast.error(response.message)
                 }
             })
-            
         } catch(err){
             setLoading(false)
             toast.error(err.message)
