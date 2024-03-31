@@ -19,9 +19,11 @@ import transfer from "#/assets/icons/transfer.svg";
 import avatar from "#/assets/avatar.png";
 import notification from "#/assets/icons/notification.svg";
 import arrow_up from "#/assets/icons/arrow-up.svg";
+import { useAuthRedirect } from "../../../hook/useAuthRedirect";
 
 export default function Assets() {
   const { token } = useSelector((state) => state.login);
+  useAuthRedirect(token);
 
   const [user, setUser] = useState({
     email: "info@bitpay.com",
