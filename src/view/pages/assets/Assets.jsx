@@ -26,6 +26,9 @@ export default function Assets() {
   const [user, setUser] = useState({
     email: "info@bitpay.com",
     user_id: 12345,
+    ref: {
+      code: 'test'
+    }
   });
   const [loading, setLoading] = useState(true);
   const [profileType, setProfileType] = useState({
