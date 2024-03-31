@@ -67,6 +67,7 @@ export default function Register(){
                 email: '',
                 username: '',
                 password: '',
+                ref_code: '',
                 password_confirmation: '',
                 }}
                 validationSchema={registerSchema}
@@ -111,6 +112,19 @@ export default function Register(){
                         <ErrorMessage name="username" component="span" className="error-message text-red-500 font-light" />
                         {errors.username && (
                             <span className="error-message text-red-500 font-light">{errors.username[0]}</span>
+                        )}
+                    </motion.div>
+                    <motion.div 
+                        className={`input_group mt-8 ${errors.ref_code ? 'border border-red-500' : ''}`}
+                        initial={{ opacity: 0, y: -100 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: .3 }}
+                    >
+                        <label>Referral Code</label>
+                        <Field type='text' name='ref_code' />
+                        <ErrorMessage name="ref_code" component="span" className="error-message text-red-500 font-light" />
+                        {errors.ref_code && (
+                            <span className="error-message text-red-500 font-light">{errors.ref_code[0]}</span>
                         )}
                     </motion.div>
                     <motion.div 
