@@ -42,7 +42,7 @@ export default function Register(){
                 setErrors({});
                 dispatch(loginSuccess(response.data))
                 dispatch(registerSuccess(response.data));
-                navigate('/assets')
+                navigate('/profile')
             }else{
                 setErrors(response.errors);
                 dispatch(registerFailure(response.errors));

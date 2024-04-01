@@ -1,14 +1,17 @@
 import { request } from "../service/base";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export async function useAuthRedirect() {
   const navigate = useNavigate();
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem('state')?.login?.token;
+      const jsonData = JSON.parse(localStorage.getItem("state"));
+      const token = jsonData?.login?.token;
+
+      console.log(token);
       if (!token) {
-        navigate('/login');
+        navigate("/login");
         return;
       }
 
@@ -18,19 +21,17 @@ export async function useAuthRedirect() {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.data.authenticated; // Assuming response contains "authenticated" property
+      return response.data.authenticated;
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        navigate('/login');
+        navigate("/login");
       } else {
         throw error;
       }
     }
   };
 
-  // Call the checkAuth function inside the hook
   const isAuthenticated = await checkAuth();
 
-  // No need for the original `if` check, use the returned value
   return isAuthenticated;
 }

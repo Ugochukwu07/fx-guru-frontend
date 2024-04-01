@@ -35,4 +35,6 @@ export const { loginStart, loginSuccess, loginFailure } =
 export const isAuthenticated = (state) =>
   (state?.login?.token && state?.login?.token.length > 4);
 
+export const myToken = (state) => state?.login.token;
+
 export default loginSlice.reducer;
