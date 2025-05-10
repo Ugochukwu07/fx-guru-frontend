@@ -69,7 +69,19 @@ function Deposit(){
         const fetchData = async () => {
             try {
                 const data = await getCurrencies(token);
-                setWallets(data);
+                // if(!data.success){
+                //     toast.error(data.message)
+                //     return
+                // }
+
+                console.log(data);
+                
+                if(data.length == 0){
+                    toast.error('No currencies found')
+                    navigate(-1)
+                }
+
+                setWallets(data)
                 setCurrenciesList(setupWallet(data))
                 setCurrentWallet(data[Object.keys(data)[0]])
             } catch (error) {
@@ -181,7 +193,9 @@ function Deposit(){
             >
                 <div className='deposit_header flex'>
                     <div className='deposit_header__nav'>
-                        <img onClick={goBack} src={back} />
+                        <div  onClick={goBack}>
+                        <img src={back} />
+                        </div>
                     </div>
                     <div className='deposit_header__title'>
                         <span>Deposits</span>

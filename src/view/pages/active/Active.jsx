@@ -86,7 +86,7 @@ export default function Active(){
                     <span>Purchase price</span>
                     <span>{Number(market.price).toFixed(4)}</span>
                     <span>Profit and Loss</span>
-                    <span className={isPositive ? 'up active' : 'down active'}>+{profit}</span>
+                    <span className={isPositive ? 'up active' : 'down active'}>{isPositive ? '+' : '-'}{profit}</span>
                 </div>
                 <Link to='/trade'><button>Back</button></Link>
                 <br />
