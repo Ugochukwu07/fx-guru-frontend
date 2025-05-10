@@ -41,7 +41,7 @@ export default function Market(){
                     <thead>
                         <tr>
                             <th>Pairs</th>
-                            <th>Price</th>
+                            <th style={{ textAlign: 'center' }}>Price</th>
                             <th>Change</th>
                         </tr>
                     </thead>

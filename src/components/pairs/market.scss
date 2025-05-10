@@ -1,5 +1,9 @@
 .market{
     padding: 5px;
+    &_title h2{
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
     &_table{
         table{
             width: 100%;
@@ -15,8 +19,8 @@
         }
         .table__pairs{
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            align-items: start;
+            // justify-content: space-between;
             img{
                 width: 30px;
                 margin-right: 5px;
@@ -32,6 +36,7 @@
                 line-height: 15px;
                 text-align: left !important;
                 font-family: JasmineUPC;
+                margin-right: auto;
                 span{
                     display: block;
                     margin: 0;
@@ -56,7 +61,10 @@
         }
         .table__change__img{
             width: 5px;
-            display: inline;
+            // display: inline;
+            // align-items: end;
+            // justify-content: end;
+            // float: right;
         }
     }
 }
